@@ -1,7 +1,7 @@
 ---
 abstract: 'Handle many kinds of Japanese characters'
 author:
-  - 'Ben Bullock, C<< <bkb\@cpan.org> >>'
+  - 'Ben Bullock, C<< <bkb@cpan.org> >>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
   Test::More: 0
@@ -25,4 +25,4 @@ requires:
   File::ShareDir: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.02
+version: 0.03

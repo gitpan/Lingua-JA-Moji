@@ -1,12 +1,42 @@
+=encoding UTF-8
+
+=head1 NAME
+
+Lingua::JA::Moji - Handle many kinds of Japanese characters
+
+=head1 SYNOPSIS
+
+Convert various types of characters into one another.
+
+    use Lingua::JA::Moji qw/kana2romaji romaji2kana/;
+    use utf8;
+    my $romaji = kana2romaji ('あいうえお');
+    # $romaji is now 'aiueo'.
+    my $kana = romaji2kana ($romaji);
+    # $kana is now 'アイウエオ'.
+
+=head1 EXPORT
+
+This module does not export any functions except on request.
+
+=head1 ENCODING
+
+All the functions in this module assume that you are using Perl's
+Unicode encoding, and all input and output strings must be encoded
+using Perl's so-called "utf8".
+
+=head1 FUNCTIONS
+
+=cut
+
 package Lingua::JA::Moji;
 
 use warnings;
 use strict;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 use Carp;
 use Lingua::JA::Moji::Convertor qw/load_convertor make_convertors/;
-#use lib '/home/ben/perl/mypm/Convert-Moji/lib/';
 use Convert::Moji;
 use utf8;
 use File::ShareDir 'dist_file';
@@ -22,12 +52,16 @@ our @EXPORT_OK = qw/kana2hw
                     hira2kata
                     is_romaji
                     is_kana
+                    is_hiragana
                     is_voiced
                     romaji_styles
                     romaji_vowel_styles
                     kana2circled
                     circled2kana
-                    kana2katakana/;
+                    kana2katakana
+                    normalize_romaji
+                    InHankakuKatakana
+                    InWideAscii/;
 
 our $AUTOLOAD;
 
@@ -169,88 +203,50 @@ my %長音表記;
 @{$長音表記{passport}}{@あいうえお}   = qw/a  i  u  e  oh oh/;
 @{$長音表記{none}}{@あいうえお}       = qw/a  i  u  e  o  o/;
 
-=head2 romaji_styles
+=head2 kana2romaji
 
-my @styles = romaji_styles ();
-# Returns a true value
-romaji_styles ("hepburn");
-# Returns the undefined value
-romaji_styles ("frogs");
+    use utf8;
+    my $romaji = kana2romaji ("うれしいこども");
 
-Given an argument, return whether it is a legitimate style of romanization.
+    # $romaji = "uresiikodomo"
 
-Without an argument, return a list of possible styles, as an array of hash values, with each hash element containing "abbrev" as a short name and "full_name" for the full name of the style.
+Convert kana to a romanized form.
+
+An optional second argument, a hash reference, controls the style of
+conversion.
+
+    use utf8;
+    my $romaji = kana2romaji ("しんぶん", {style => "hepburn"});
+    # $romaji = "shimbun"
+
+The possible options are
+
+=over
+
+=item style
+
+The style of romanization. The default form of romanization is
+"Nihon-shiki". See
+L<http://www.sljfaq.org/afaq/nippon-shiki.html>. The user can set it
+to "hepburn" or "passport" or "kunrei".
+
+=item use_m
+
+If this is set to any "true" value, syllabic I<n>s (ん) which come
+before "b" or "p" sounds, such as the first "n" in "shinbun" (しんぶん,
+newspaper) will be converted into "m" rather than "n".
+
+=item ve_type
+
+C<ve_type> controls how long vowels are written. The default is to use
+circumflexes to represent long vowels. If you set "ve_type" =>
+"macron", then it uses macrons (the Hepburn system). If you set
+C<"ve_type" => "passport">, then it uses "oh" to write long "o"
+vowels.
+
+=back
 
 =cut
-
-sub romaji_styles
-{
-    my ($check) = @_;
-        my @styles = 
-            (
-         {
-          abbrev    => "hepburn",
-          full_name => "Hepburn",
-      },
-         {
-          abbrev    => 'nihon',
-          full_name => 'Nihon-shiki',
-      },
-         {
-          abbrev    => 'kunrei',
-          full_name => 'Kunrei-shiki',
-      }
-         );
-    if (! defined ($check)) {
-        return (@styles);
-    } else {
-        for my $style (@styles) {
-            if ($check eq $style->{abbrev}) {
-                return 1;
-            }
-        }
-        return;
-    }
-}
-
-sub romaji_vowel_styles
-{
-    my ($check) = @_;
-        my @styles = 
-            (
-         {
-          abbrev    => "macron",
-          full_name => "Macron",
-      },
-         {
-          abbrev    => 'circumflex',
-          full_name => 'Circumflex',
-      },
-         {
-          abbrev    => 'wapuro',
-          full_name => 'Wapuro',
-      },
-         {
-          abbrev    => 'passport',
-          full_name => 'Passport',
-      },
-         {
-          abbrev    => 'none',
-          full_name => "Do not indicate",
-      },
-         );
-    if (! defined ($check)) {
-        return (@styles);
-    } else {
-        for (@styles) {
-            if ($check eq $_->{abbrev}) {
-                return 1;
-            }
-            return;
-        }
-    }
-
-}
 
 sub kana2romaji
 {
@@ -380,6 +376,13 @@ sub kana2romaji
     return $input;
 }
 
+=head2 romaji2hiragana
+
+Convert romanized Japanese into hiragana. This takes the same options
+as L<romaji2kana>.
+
+=cut
+
 sub romaji2hiragana
 {
     my $katakana = romaji2kana(@_, {wapuro => 1});
@@ -387,6 +390,92 @@ sub romaji2hiragana
     return kata2hira ($katakana);
 }
 
+
+=head2 romaji_styles
+
+    my @styles = romaji_styles ();
+    # Returns a true value
+    romaji_styles ("hepburn");
+    # Returns the undefined value
+    romaji_styles ("frogs");
+
+Given an argument, return whether it is a legitimate style of romanization.
+
+Without an argument, return a list of possible styles, as an array of
+hash values, with each hash element containing "abbrev" as a short
+name and "full_name" for the full name of the style.
+
+=cut
+
+sub romaji_styles
+{
+    my ($check) = @_;
+        my @styles = 
+            (
+         {
+          abbrev    => "hepburn",
+          full_name => "Hepburn",
+      },
+         {
+          abbrev    => 'nihon',
+          full_name => 'Nihon-shiki',
+      },
+         {
+          abbrev    => 'kunrei',
+          full_name => 'Kunrei-shiki',
+      }
+         );
+    if (! defined ($check)) {
+        return (@styles);
+    } else {
+        for my $style (@styles) {
+            if ($check eq $style->{abbrev}) {
+                return 1;
+            }
+        }
+        return;
+    }
+}
+
+# Check whether this vowel style is allowed.
+
+sub romaji_vowel_styles
+{
+    my ($check) = @_;
+    my @styles = (
+    {
+        abbrev    => "macron",
+        full_name => "Macron",
+    },
+    {
+        abbrev    => 'circumflex',
+        full_name => 'Circumflex',
+    },
+    {
+        abbrev    => 'wapuro',
+        full_name => 'Wapuro',
+    },
+    {
+        abbrev    => 'passport',
+        full_name => 'Passport',
+    },
+    {
+        abbrev    => 'none',
+        full_name => "Do not indicate",
+    },
+    );
+    if (! defined ($check)) {
+        return (@styles);
+    } else {
+        for (@styles) {
+            if ($check eq $_->{abbrev}) {
+                return 1;
+            }
+            return;
+        }
+    }
+
+}
 
 my $romaji2katakana;
 my $romaji_regex;
@@ -398,7 +487,21 @@ my $longvowels = join '|', sort {length($a)<=>length($b)} keys %longvowels;
 
 =head2 romaji2kana
 
-Convert romanized Japanese (romaji) into katakana.
+     my $kana = romaji2kana ('yamaguti');
+     # $kana = 'ヤマグチ';
+
+
+Convert romanized Japanese to kana. The romanization is highly liberal
+and will attempt to convert any romanization it sees into kana.
+
+     my $kana = romaji2kana ($romaji, {wapuro => 1});
+
+Use an option C<< wapuro => 1 >> to convert long vowels into the
+equivalent kana rather than I<chouon>.
+
+Convert romanized Japanese (romaji) into katakana. If you want to
+convert romanized Japanese into hiragana, use L<romaji2hiragana>
+instead of this.
 
 =cut
 
@@ -434,9 +537,13 @@ sub romaji2kana
 
 =head2 is_voiced
 
-Given a kana or romaji input, return a true value if the sound is a
-voiced sound like a, za, ga, etc. and the undefined value if the sound
-is not.
+    if (is_voiced ('が')) {
+         print "が is voiced.\n";
+    }
+
+Given a kana or romaji input, C<is_voiced> returns a true value if the
+sound is a voiced sound like I<a>, I<za>, I<ga>, etc. and the
+undefined value if not.
 
 =cut
 
@@ -460,13 +567,18 @@ sub is_voiced
 
 =head2 is_romaji
 
-# Returns "undef"
-is_romaji ("abcdefg");
-# Returns a defined value
-is_romaji ("atarimae");
+    # The following line returns "undef"
+    is_romaji ("abcdefg");
+    # The following line returns a defined value
+    is_romaji ("atarimae");
 
-Detect whether a string of ASCII "looks like" romanized Japanese. If
-the test is successful, returns the romaji in a canonical form.
+Detect whether a string of alphabetical characters, which may also
+include characters with macrons or circumflexes, "looks like"
+romanized Japanese. If the test is successful, returns the romaji in a
+canonical form.
+
+This functions by converting the string to kana and seeing if it
+converts cleanly or not.
 
 =cut
 
@@ -487,10 +599,16 @@ sub is_romaji
 
 =head2 hira2kata
 
-my $katakana = kata2hira ($hiragana);
+    my $katakana = hira2kata ($hiragana);
 
-Convert hiragana into katakana. If the input is a list, it converts
-each element of the list.
+C<hira2kata> converts hiragana into katakana. If the input is a list,
+it converts each element of the list, and if required, returns a list
+of the converted inputs, otherwise it returns a concatenation of the
+strings.
+
+    my @katakana = hira2kata (@hiragana);
+
+This does not convert chouon signs.
 
 =cut
 
@@ -503,10 +621,18 @@ sub hira2kata
 
 =head2 kata2hira
 
-my $hiragana = kata2hira ($katakana);
+     my $hiragana = kata2hira ('カキクケコ');
+     # $hiragana = 'かきくけこ';
 
-Convert katakana into hiragana. If the input is a list, it converts
-each element of the list.
+C<kata2hira> converts full-width katakana into hiragana. If the input
+is a list, it converts each element of the list, and if required,
+returns a list of the converted inputs, otherwise it returns a
+concatenation of the strings.
+
+    my @hiragana = hira2kata (@katakana);
+
+This function does not convert chouon signs into long vowels. It also
+does not convert half-width katakana into hiragana.
 
 =cut
 
@@ -516,6 +642,8 @@ sub kata2hira
     for (@input) {tr/ァ-ン/ぁ-ん/}
     return wantarray ? @input : "@input";
 }
+
+# Make the list of dakuon stuff.
 
 sub make_dak_list
 {
@@ -564,6 +692,19 @@ sub kana2hw2
 
 my $kata2hw;
 
+=head2 kana2hw
+
+     my $half_width = kana2hw ('あいウカキぎょう。');
+     # $half_width = 'ｱｲｳｶｷｷﾞｮｳ｡'
+
+C<kana2hw> converts hiragana, katakana, and fullwidth Japanese
+punctuation to halfwidth katakana and halfwidth punctuation. Its
+function is similar to the Emacs command C<japanese-hankaku-region>.
+For the opposite function,
+see L<hw2katakana>.
+
+=cut
+
 sub kana2hw
 {
    my ($input) = @_;
@@ -582,6 +723,18 @@ sub kana2hw
    return $kata2hw->convert ($input);
 }
 
+=head2 hw2katakana
+
+     my $full_width = kana2hw ('ｱｲｳｶｷｷﾞｮｳ｡');
+     # $full_width = 'アイウカキギョウ。'；
+
+C<hw2katakana> converts halfwidth katakana and Japanese punctuation to
+fullwidth katakana and punctuation. Its function is similar to the
+Emacs command C<japanese-zenkaku-region>. For the opposite function,
+see L<kana2hw>.
+
+=cut
+
 sub hw2katakana
 {
     my ($input) = @_;
@@ -593,6 +746,19 @@ sub hw2katakana
     return $kata2hw->invert ($input);
 }
 
+=head2 InHankakuKatakana
+
+    use Lingua::JA::Moji qw/InHankakuKatakana/;
+    use utf8;
+    if ('ｱ' =~ /\p{InHankakuKatakana}/) {
+        print "ｱ is half-width katakana\n";
+    }
+
+C<InHankakuKatakana> is a character class for use in regular
+expressions with C<\p> which can validate halfwidth katakana.
+
+=cut
+
 sub InHankakuKatakana
 {
     return <<'END';
@@ -601,6 +767,16 @@ sub InHankakuKatakana
 END
 }
 
+=head2 wide2ascii
+
+     my $ascii = wide2ascii ('ａｂＣＥ０１９');
+     # $ascii = 'abCE019'
+
+Convert the "wide ASCII" used in Japan (fullwidth ASCII, 全角英数字)
+into usual ASCII symbols (半角英数字).
+
+=cut
+
 sub wide2ascii
 {
     my ($input) = @_;
@@ -608,12 +784,33 @@ sub wide2ascii
     return $input;
 }
 
+=head2 ascii2wide
+
+Convert usual ASCII symbols (半角英数字) into the "wide ASCII" used in
+Japan (fullwidth ASCII, 全角英数字).
+
+
+=cut
+
 sub ascii2wide
 {
     my ($input) = @_;
     $input =~ tr/ -~/\x{3000}\x{FF01}-\x{FF5E}/;
     return $input;
 }
+
+=head2 InWideAscii
+
+    use Lingua::JA::Moji qw/InWideAscii/;
+    use utf8;
+    if ('Ａ' =~ /\p{InWideAscii}/) {
+        print "Ａ is half-width katakana\n";
+    }
+
+This is a character class for use with \p which matches a "wide ascii"
+(全角英数字).
+
+=cut
 
 sub InWideAscii
 {
@@ -631,6 +828,12 @@ sub load_kana2morse
 	$kana2morse = Lingua::JA::Moji::make_convertors ('katakana', 'morse');
     }
 }
+
+=head2 kana2morse
+
+Convert Japanese kana into Morse code
+
+=cut
 
 sub kana2morse
 {
@@ -717,6 +920,22 @@ sub is_kana
     return;
 }
 
+=head2 is_hiragana
+
+Returns a true value if its argument is a string of kana, or an
+undefined value if not.
+
+=cut
+
+sub is_hiragana
+{
+    my ($may_be_kana) = @_;
+    if ($may_be_kana =~ /^[あ-ん]+$/) {
+        return 1;
+    }
+    return;
+}
+
 =head2 kana2katakana
 
 Convert either katakana or hiragana to katakana.
@@ -763,6 +982,12 @@ sub kana2braille2
     return $conv;
 }
 
+=head2 kana2braille
+
+Converts kana into the equivalent Japanese braille (I<tenji>) forms.
+
+=cut
+
 
 sub kana2braille
 {
@@ -781,6 +1006,12 @@ sub kana2braille
 #    print $input,"\n";
     return $input;
 }
+
+=head2 braille2kana
+
+Converts Japanese braille (I<tenji>) into the equivalent katakana.
+
+=cut
 
 sub braille2kana
 {
@@ -805,6 +1036,12 @@ sub load_circled_conv
     }
 }
 
+=head2 kana2circled
+
+C<kana2circled> converts kana into the "circled katakana" of Unicode.
+
+=cut
+
 sub kana2circled
 {
     my ($input) = @_;
@@ -816,6 +1053,13 @@ sub kana2circled
     return $input;
 }
 
+=head2 circled2kana
+
+C<circled2kana> converts the "circled katakana" of Unicode into the
+usual katakana.
+
+=cut
+
 sub circled2kana
 {
     my ($input) = @_;
@@ -823,6 +1067,22 @@ sub circled2kana
     $input = $circled_conv->invert ($input);
     $input = $strip_daku->invert($input);
     return $input;
+}
+
+=head2 normalize_romaji
+
+C<normalize_romaji> converts romanized Japanese to a canonical form,
+which is based on the Nippon-shiki romanization, but without
+representing long vowels using a circumflex.
+
+=cut
+
+sub normalize_romaji
+{
+    my ($romaji) = @_;
+    my $kana = romaji2kana ($romaji, {ve_type => 'wapuro'});
+    $kana =~ s/[っッ]/xtu/g;
+    my $romaji_out = kana2romaji ($kana, {ve_type => 'wapuro'});
 }
 
 # sub AUTOLOAD {
@@ -849,139 +1109,48 @@ sub circled2kana
 
 __END__
 
-=encoding UTF-8
-
-=head1 NAME
-
-Lingua::JA::Moji - Handle many kinds of Japanese characters
-
-=head1 SYNOPSIS
-
-Convert various types of characters into one another.
-
-    use Lingua::JA::Moji;
-
-=head1 EXPORT
-
-=head1 FUNCTIONS
-
-
-=head2 kana2romaji
-
-    my $romaji = kana2romaji ("うれしいこども");
-
-    # $romaji = "uresiikodomo"
-
-Convert kana to a romanized form.
-
-An optional second argument, a hash reference, controls the style of
-conversion.
-
-    my $romaji = kana2romaji ("しんぶん", {style => "hepburn"});
-
-    # $romaji = "shimbun"
-
-Possible options are
-
-=list
-
-=item style
-
-The style of romanization. Can be "hepburn" or "passport".
-
-=item use_m
-
-If this is "true", then the first "n" in "shinbun" (しんぶん) will be
-converted into "m" rather than "n".
-
-=item ve_type
-
-This controls how long vowels are written. The default is to use
-circumflexes to represent long vowels. If you set "ve_type" =>
-"macron", then it uses macrons. If you set "ve_type" => "passport",
-then it uses "oh" to write long "o" vowels.
-
-=back
-
-=cut
-
-=head2 romaji2hiragana
-
-Convert romanized Japanese into hiragana. See romaji2kana for options.
-
-=cut
-
-=head2 romaji2kana
-
-   my $kana = romaji2kana ($romaji);
-
-Convert romanized Japanese to kana. Highly liberal.
-
-   my $kana = romaji2kana ($romaji, {wapuro => 1});
-
-Put wapuro => 1 to convert long vowels into the equivalent kana rather
-than chouon.
-
-=head2 hira2kata
-
-Convert hiragana to fullwidth katakana.
-
-=head2 kata2hira
-
-Convert fullwidth katakana to hiragana.
-
-=head2 kana2hw
-
-Convert hiragana, katakana, and fullwidth Japanese punctuation to
-halfwidth katakana and halfwidth punctuation.
-
-=head2 hw2katakana
-
-Convert halfwidth katakana and Japanese punctuation to fullwidth
-katakana and punctuation.
-
-=head2 kana2braille
-
-Convert Japanese kana into Japanese braille.
-
-=head2 InHankakuKatakana
-
-This is a character class for use with \p which can validate halfwidth
-katakana.
-
-=head2 wide2ascii
-
-Convert the "wide ASCII" used in Japan (fullwidth ASCII, 全角英数字)
-into usual ASCII symbols (半角英数字).
-
-=head2 ascii2wide
-
-Convert usual ASCII symbols (半角英数字) into the "wide ASCII" used in
-Japan (fullwidth ASCII, 全角英数字).
-
-=head2 InWideAscii
-
-This is a character class for use with \p which matches a "wide ascii"
-(全角英数字).
-
-=head2 kana2morse
-
-Convert Japanese kana into Morse code
-
 =head1 AUTHOR
 
-Ben Bullock, C<< <bkb\@cpan.org> >>
+Ben Bullock, C<< <bkb@cpan.org> >>
 
-=head1 BUGS
+=head1 SUPPORT
 
-Please send bug reports to me by email.
+=head2 Mailing list
+
+I have set up a mailing list for this module and L<Convert::Moji> at
+L<http://groups.google.com/group/perl-moji>. If you have any questions
+about either of these modules, please ask on the mailing list rather
+than sending me email, because I would prefer that a record of the
+conversation can be kept for the future reference of other users.
+
+=head2 Examples
+
+For examples of this module in use, see my website
+L<http://www.lemoda.net/lingua-ja-moji/index.html>. This page links to
+examples which I've set up on the web specifically to show this module
+in action.
+
+=head2 Bugs
+
+Please send bug reports to the Perl bug tracker at rt.cpan.org, or
+send them to the mailing list.
+
+There are some known bugs or issues with romaji to kana conversion and
+vice-versa. I'm still working on these.
 
 =head1 STATUS
 
-This module is alpha and the external interface is liable to change
-drastically in the future. If you have a request, please speak up.
+This module is "alpha" (that is a computerese euphemism for "the
+module is badly-formed and unfinished") and the external interface is
+liable to change drastically in the future. If you have a request,
+please speak up.
+
+Please also note that some of this documentation is not finished yet,
+some of the functions documented here don't exist yet.
 
 =head1 SEE ALSO
+
+There are some other useful Perl modules already on CPAN as follows.
 
 =head2 Japanese kana/romanization
 
@@ -1023,7 +1192,7 @@ Validate romanized Japanese.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008-2009 Ben Bullock, all rights reserved.
+Copyright 2008-2010 Ben Bullock, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

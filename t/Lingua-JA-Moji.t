@@ -2,7 +2,9 @@ use warnings;
 use strict;
 use utf8;
 use Test::More tests => 26;
-binmode STDOUT, "utf8";
+# http://code.google.com/p/test-more/issues/detail?id=46
+binmode Test::More->builder->output, ":utf8";
+binmode Test::More->builder->failure_output, ":utf8";
 BEGIN { use_ok('Lingua::JA::Moji') };
 
 use Lingua::JA::Moji qw/romaji2kana
