@@ -34,7 +34,7 @@ package Lingua::JA::Moji;
 use warnings;
 use strict;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 use Carp;
 use Lingua::JA::Moji::Convertor qw/load_convertor make_convertors/;
 use Convert::Moji;
@@ -43,25 +43,31 @@ use File::ShareDir 'dist_file';
 require Exporter;
 our @ISA = qw(Exporter);
 
-our @EXPORT_OK = qw/kana2hw
+our @EXPORT_OK = qw/
                     kana2romaji
-                    romaji2kana
                     romaji2hiragana
-		    hw2katakana
-                    kata2hira
-                    hira2kata
+                    romaji_styles
+                    romaji2kana
+                    is_voiced
                     is_romaji
+                    hira2kata
+                    kata2hira
+                    kana2hw
+                    hw2katakana
+                    InHankakuKatakana
+                    wide2ascii
+                    ascii2wide
+                    InWideAscii
+                    kana2morse
                     is_kana
                     is_hiragana
-                    is_voiced
-                    romaji_styles
-                    romaji_vowel_styles
+                    kana2katakana
+                    kana2braille
+                    braille2kana
                     kana2circled
                     circled2kana
-                    kana2katakana
                     normalize_romaji
-                    InHankakuKatakana
-                    InWideAscii/;
+                    /;
 
 our $AUTOLOAD;
 
@@ -226,9 +232,10 @@ The possible options are
 =item style
 
 The style of romanization. The default form of romanization is
-"Nihon-shiki". See
-L<http://www.sljfaq.org/afaq/nippon-shiki.html>. The user can set it
-to "hepburn" or "passport" or "kunrei".
+"Nippon-shiki". See
+L<http://www.sljfaq.org/afaq/nippon-shiki.html>. The user can set the
+conversion style to "hepburn" or "passport" or "kunrei". See
+L<http://www.sljfaq.org/afaq/kana-roman.html>.
 
 =item use_m
 
@@ -241,8 +248,8 @@ newspaper) will be converted into "m" rather than "n".
 C<ve_type> controls how long vowels are written. The default is to use
 circumflexes to represent long vowels. If you set "ve_type" =>
 "macron", then it uses macrons (the Hepburn system). If you set
-C<"ve_type" => "passport">, then it uses "oh" to write long "o"
-vowels.
+C<< "ve_type" => "passport" >>, then it uses "oh" to write long "o"
+vowels. If you set C<< "ve_type" => "none" >>, then it does not use "h".
 
 =back
 
@@ -804,7 +811,7 @@ sub ascii2wide
     use Lingua::JA::Moji qw/InWideAscii/;
     use utf8;
     if ('Ａ' =~ /\p{InWideAscii}/) {
-        print "Ａ is half-width katakana\n";
+        print "Ａ is wide ascii\n";
     }
 
 This is a character class for use with \p which matches a "wide ascii"
@@ -1189,6 +1196,9 @@ Validate romanized Japanese.
 =back
 
 =head1 ACKNOWLEDGEMENTS
+
+Thanks to Naoki Tomita for various assitances (see
+L<http://groups.google.com/group/perl-moji/browse_thread/thread/10a42c35f7c22ebc>).
 
 =head1 COPYRIGHT & LICENSE
 
