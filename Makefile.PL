@@ -4,7 +4,7 @@ name 'Lingua-JA-Moji',
 all_from 'lib/Lingua/JA/Moji.pm',
 #author   'Ben Kasmin Bullock <benkasminbullock@gmail.com>';
 requires('File::ShareDir');
-requires('Convert::Moji');
+requires('Convert::Moji' => 0.03);
 
 build_requires 'Test::More';
 

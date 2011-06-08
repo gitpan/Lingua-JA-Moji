@@ -16,12 +16,12 @@ use Lingua::JA::Moji qw/romaji2kana
 
 # Sanity tests
 
-ok (romaji2kana ('kakikukeko') eq 'カキクケコ');
-ok (kana2romaji ('かきくけこ') eq 'kakikukeko');
+ok (romaji2kana ('kakikukeko') eq 'カキクケコ', "Convert 'kakikukeko' to kana");
+ok (kana2romaji ('かきくけこ') eq 'kakikukeko', "Convert 'かきくけこ' to romaji");
 
 # Sokuon
 
-ok (romaji2kana ('kakko') eq 'カッコ');
+ok (romaji2kana ('kakko') eq 'カッコ', "Convert 'kakko' to katakana");
 
 ok (! is_romaji ("abcdefg"), "abcdefg does not look like romaji");
 ok (is_romaji ("atarimae") eq "atarimae");
