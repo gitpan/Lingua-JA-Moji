@@ -3,10 +3,9 @@ package Lingua::JA::Moji;
 use warnings;
 use strict;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use Carp;
-#use Lingua::JA::Moji::Convertor qw/load_convertor make_convertors/;
 use Convert::Moji qw/make_regex length_one unambiguous/;
 use utf8;
 use File::ShareDir 'dist_file';
@@ -31,6 +30,7 @@ our @EXPORT_OK = qw/
                     ascii2wide
                     InWideAscii
                     kana2morse
+                    morse2kana
                     is_kana
                     is_hiragana
                     kana2katakana
@@ -41,6 +41,8 @@ our @EXPORT_OK = qw/
                     normalize_romaji
                     new2old_kanji
                     old2new_kanji
+                    kana2cyrillic
+                    cyrillic2katakana
                     /;
 
 our %EXPORT_TAGS = (
@@ -741,7 +743,7 @@ sub kana2morse
     my ($input) = @_;
     load_kana2morse;
     $input = hira2kata ($input);
-    $input =~ tr/ァィゥェォャュョ/アイウエオヤユヨ/;
+    $input =~ tr/ァィゥェォャュョッ/アイウエオヤユヨツ/;
     load_strip_daku;
     $input = $strip_daku->convert ($input);
     $input = join ' ', (split '', $input);
@@ -962,6 +964,39 @@ sub old2new_kanji
     my $new_kanji = $new2old_kanji->invert ($old_kanji);
     return $new_kanji;
 }
+
+my $katakana2cyrillic;
+
+sub load_katakana2cyrillic
+{
+    $katakana2cyrillic = Convert::Moji->new (['file', getdistfile ('katakana2cyrillic')]);
+}
+
+sub kana2cyrillic
+{
+my ($kana) = @_;
+my $katakana = kana2katakana ($kana);
+$katakana =~ s/ン([アイウエオヤユヨ])/ンъ$1/g;
+if (! $katakana2cyrillic) {
+load_katakana2cyrillic ();
+}
+my $cyrillic = $katakana2cyrillic->convert ($katakana);
+$cyrillic =~ s/н([пбм])/м$1/g;
+return $cyrillic;
+}
+
+sub cyrillic2katakana
+{
+my ($cyrillic) = @_;
+if (! $katakana2cyrillic) {
+load_katakana2cyrillic ();
+}
+my $katakana = $katakana2cyrillic->invert ($cyrillic);
+$katakana =~ s/м/ン/g; 
+$katakana =~ s/ンъ([アイウエオヤユヨ])/ン$1/g;
+return $katakana;
+}
+
 
 1; 
 

@@ -15,14 +15,24 @@ Lingua::JA::Moji - [% trans.abstract %]
     my $kana = romaji2kana ($romaji);
     # $kana is now 'アイウエオ'.
 
-=head1 [% trans.functions | upper %]
+=head1 DESCRIPTION
+
+This module provides methods to convert different written forms of
+Japanese into one another.
+
+All the functions in this module assume the use of Unicode
+encoding. All input and output strings must be encoded using UTF-8.
 
 [%- FOR function IN functions %]
 
 [% IF function.defined ('class') %]
 
-=head1 [% function.class | upper %]
+[% class = function.class %]
 
+=head1 [% trans.$class | upper %]
+[% IF function.defined ('explain') %]
+[% function.explain.$lang %]
+[% END %]
 [% ELSE %]
 
 =head2 [% function.name %] [% IF function.defined ('abstract') -%]
@@ -30,11 +40,12 @@ Lingua::JA::Moji - [% trans.abstract %]
 [%- END %]
 
     use [% module %] '[% function.name %]';
+[% IF function.defined ('eg') %]
 [% function.eg | indent ('    ') %]
 [%- IF function.defined ('out') && function.defined ('expect') %]
     # Now [% function.out %] = '[% function.expect %]'
 [%- END %]
-
+[% END %]
 [% IF function.desc.defined (lang) %]
 
 [% function.desc.$lang %]
@@ -45,7 +56,7 @@ Lingua::JA::Moji - [% trans.abstract %]
 
 =head3 [% trans.bugs %]
 
-[%- function.bugs %]
+[%- function.bugs.$lang %]
 
 [%- END %]
 
@@ -60,16 +71,9 @@ Lingua::JA::Moji - [% trans.abstract %]
 There is a mailing list for this module and L<Convert::Moji> at
 L<http://groups.google.com/group/perl-moji>. 
 
-=head2 Examples
-
-For examples of this module in use, see
-L<http://www.lemoda.net/lingua-ja-moji/index.html>.
-
 =head1 DIAGNOSTICS
 
-
-
-=head1 BUGS
+=head1 [% trans.bugs %]
 
 =over
 
@@ -79,7 +83,7 @@ There are some bugs with romaji to kana conversion and vice-versa.
 
 =back
 
-=head1 SEE ALSO
+=head1 [% trans.also %]
 
 Other Perl modules on CPAN include
 
@@ -112,6 +116,10 @@ Validate romanized Japanese.
 
 =back
 
+=head2 Books
+
+[% trans.naokitomitabook %]
+
 =head1 EXPORT
 
 This module exports its functions only on request. To export all the
@@ -119,17 +127,7 @@ functions in the module,
 
     use Lingua::JA::Moji ':all';
 
-=head1 ENCODING
-
-All the functions in this module assume the use of Unicode
-encoding. All input and output strings must be encoded using UTF-8.
-
-=head1 ACKNOWLEDGEMENTS
-
-Thanks to Naoki Tomita for various assitances (see
-L<http://groups.google.com/group/perl-moji/browse_thread/thread/10a42c35f7c22ebc>).
-
-=head1 AUTHOR
+=head1 [% trans.author %]
 
 Ben Bullock, C<< <bkb@cpan.org> >>
 
@@ -141,3 +139,9 @@ This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Naoki Tomita for various assitances (see
+L<http://groups.google.com/group/perl-moji/browse_thread/thread/10a42c35f7c22ebc>).
+

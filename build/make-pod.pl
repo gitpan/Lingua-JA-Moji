@@ -5,10 +5,10 @@ use Table::Readable qw/read_table/;
 use ReadTranslations qw/read_translations_table get_lang_trans/;
 use Template;
 use utf8;
+use FindBin;
 
 my %vars;
-my $trans = read_translations_table ('moji-trans.txt');
-my $tt = Template->new (ENCODING => 'UTF8', STRICT => 1);
+my $trans = read_translations_table ("$FindBin::Bin/moji-trans.txt");
 
 my %names = (
     kana => {
@@ -75,17 +75,27 @@ my %names = (
         en => 'Pre-1949 kanji',
         ja => '旧字体',
     },
+    cyrillic => {
+        en => 'the Cyrillic (Russian) alphabet',
+        ja => 'キリル文字',
+    },
 );
 
-my @functions = read_table ('moji-functions.txt');
+my @functions = read_table ("$FindBin::Bin/moji-functions.txt");
 
 for my $function (@functions) {
-    next if $function->{class};
-    $function->{eg} =~ s/^\s+|\s+$//g;
+    if ($function->{class}) {
+        if ($function->{"explain.en"}) {
+            bilingualize ($function, 'explain');
+        }
+        next;
+    }
+    if ($function->{eg}) {
+        $function->{eg} =~ s/^\s+|\s+$//g;
     if ($function->{out} && $function->{expect}) {
         my $out;
         my $commands =<<EOF;
-use lib '../lib';
+use lib '$FindBin::Bin/../lib';
 use Lingua::JA::Moji '$function->{name}';
 my $function->{out};
 $function->{eg}
@@ -96,8 +106,9 @@ EOF
             die "Eval died with $@ during\n$commands\n";
         }
         if ($out ne $function->{expect}) {
-            die "Bad value '$out': expected $function->{expect}";
+            die "Bad value '$out': expected '$function->{expect}'";
         }
+    }
     }
 
     if ($function->{name} =~ /^([a-z_]+)2([a-z_]+)$/ &&
@@ -106,9 +117,10 @@ EOF
         $function->{abstract}->{en} = "Convert $names{$from}{en} to $names{$to}{en}";
         $function->{abstract}->{ja} = "$names{$from}{ja}を$names{$to}{ja}に";
     }
-    $function->{desc} = {};
-    $function->{desc}{en} = $function->{"desc.en"};
-    $function->{desc}{ja} = $function->{"desc.ja"};
+    bilingualize ($function, 'desc');
+    if ($function->{"bugs.en"}) {
+        bilingualize ($function, 'bugs');
+    }
 }
 
 $vars{functions} = \@functions;
@@ -122,7 +134,14 @@ my $verbose;
 
 $vars{module} = 'Lingua::JA::Moji';
 
-my $dir = '../lib/Lingua/JA';
+my $dir = "$FindBin::Bin/../lib/Lingua/JA";
+
+my $tt = Template->new (
+    ENCODING => 'UTF8',
+    STRICT => 1,
+    ABSOLUTE => 1,
+    INCLUDE_PATH => [$FindBin::Bin],
+);
 
 for my $lang (qw/en ja/) {
     get_lang_trans ($trans, \%vars, $lang, $verbose);
@@ -130,5 +149,19 @@ for my $lang (qw/en ja/) {
     $tt->process ('Moji.pod.tmpl', \%vars, "$dir/$outputs{$lang}",
                   {binmode => 'utf8'})
         or die "" . $tt->error ();
+}
+exit;
+
+sub bilingualize
+{
+    my ($function, $field) = @_;
+    $function->{$field} = {};
+    $function->{$field}{en} = $function->{"$field.en"};
+    if ($function->{"$field.ja"}) {
+        $function->{$field}{ja} = $function->{"$field.ja"};
+    }
+    else {
+        $function->{$field}{ja} = $function->{"$field.en"};
+    }
 }
 
