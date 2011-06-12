@@ -81,3 +81,7 @@ WEB+DB PRESS plus, April 2011.
 id: also
 en: See also
 ja: 参考資料
+
+id: hangul
+en: hangul (Korean letters)
+ja: ハングル

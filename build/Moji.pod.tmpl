@@ -83,7 +83,7 @@ There are some bugs with romaji to kana conversion and vice-versa.
 
 =back
 
-=head1 [% trans.also %]
+=head1 [% trans.also | upper %]
 
 Other Perl modules on CPAN include
 
@@ -99,9 +99,9 @@ contains validators for kanji and kana.
 =item L<Lingua::JA::Kana>
 
 This is where several of the ideas for this module came from. It
-contains convertors for hiragana, katakana (fullwidth only), and
-romaji. The romaji conversion is less complete than this module but
-more compact and probably much faster.
+contains convertors for hiragana, half width and full width katakana,
+and romaji. The romaji conversion is less complete than this module
+but more compact and probably much faster.
 
 =item L<Lingua::JA::Romanize::Japanese>
 
@@ -127,7 +127,7 @@ functions in the module,
 
     use Lingua::JA::Moji ':all';
 
-=head1 [% trans.author %]
+=head1 [% trans.author | upper %]
 
 Ben Bullock, C<< <bkb@cpan.org> >>
 

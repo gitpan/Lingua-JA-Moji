@@ -715,4 +715,40 @@ out: $kana
 expect: シンブン
 
 
+class: hangul
 
+name: kana2hangul
+%%eg:
+
+$hangul = kana2hangul ('すごわざ');
+
+%%
+out: $hangul
+expect: 스고와자
+%%explain.en:
+
+Convert kana into hangul (Korean letters). See also
+L<Lingua::KO::Munja>.
+
+%%
+%%explain.ja:
+
+かなをハングルに変換する。See also
+L<Lingua::KO::Munja>.
+
+%%
+%%bugs.en:
+
+=over
+
+=item Doesn't deal with ん
+
+=item May be incorrect
+
+This is based on a list found on the internet at
+L<http://kajiritate-no-hangul.com/kana.html>. There is currently no
+proof of correctness.
+
+=back
+
+%%

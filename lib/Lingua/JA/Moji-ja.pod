@@ -812,6 +812,46 @@ assistance in correcting this is very welcome.
 
 
 
+
+
+
+
+=head1 ハングル
+
+
+
+
+
+
+=head2 kana2hangul 
+
+    use Lingua::JA::Moji 'kana2hangul';
+
+    $hangul = kana2hangul ('すごわざ');
+    # Now $hangul = '스고와자'
+
+
+
+
+=head3 欠点
+
+=over
+
+=item Doesn't deal with ん
+
+=item May be incorrect
+
+This is based on a list found on the internet at
+L<http://kajiritate-no-hangul.com/kana.html>. There is currently no
+proof of correctness.
+
+=back
+
+
+
+
+
+
 =head1 SUPPORT
 
 =head2 Mailing list
@@ -847,9 +887,9 @@ contains validators for kanji and kana.
 =item L<Lingua::JA::Kana>
 
 This is where several of the ideas for this module came from. It
-contains convertors for hiragana, katakana (fullwidth only), and
-romaji. The romaji conversion is less complete than this module but
-more compact and probably much faster.
+contains convertors for hiragana, half width and full width katakana,
+and romaji. The romaji conversion is less complete than this module
+but more compact and probably much faster.
 
 =item L<Lingua::JA::Romanize::Japanese>
 

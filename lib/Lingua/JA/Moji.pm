@@ -3,7 +3,7 @@ package Lingua::JA::Moji;
 use warnings;
 use strict;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
@@ -43,6 +43,8 @@ our @EXPORT_OK = qw/
                     old2new_kanji
                     kana2cyrillic
                     cyrillic2katakana
+                    romaji_vowel_styles
+                    kana2hangul
                     /;
 
 our %EXPORT_TAGS = (
@@ -997,6 +999,31 @@ $katakana =~ s/ンъ([アイウエオヤユヨ])/ン$1/g;
 return $katakana;
 }
 
+my $first2hangul;
+my $rest2hangul;
+
+my $first2hangul_re;
+my $rest2hangul_re;
+
+sub load_kana2hangul
+{
+    $first2hangul = load_convertor ('first', 'hangul');
+    $rest2hangul = load_convertor ('rest', 'hangul');
+    $first2hangul_re = '\b' . make_regex (keys %$first2hangul);
+    $rest2hangul_re = make_regex (keys %$rest2hangul);
+}
+
+sub kana2hangul
+{
+    my ($kana) = @_;
+    my $katakana = kana2katakana ($kana);
+    if (! $first2hangul) {
+        load_kana2hangul ();
+        $katakana =~ s/($first2hangul_re)/$first2hangul->{$1}/g;
+        $katakana =~ s/($rest2hangul_re)/$rest2hangul->{$1}/g;
+    }
+    return $katakana;
+}
 
 1; 
 
