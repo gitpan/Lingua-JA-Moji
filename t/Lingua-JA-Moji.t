@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 use utf8;
-use Test::More tests => 27;
+use Test::More tests => 31;
 # http://code.google.com/p/test-more/issues/detail?id=46
 binmode Test::More->builder->output, ":utf8";
 binmode Test::More->builder->failure_output, ":utf8";
@@ -85,3 +85,15 @@ my $invoice = kana2romaji ('インヴォイス', {ve_type => 'wapuro', debug=>un
 #print "$invoice\n";
 ok ($invoice eq 'invuxoisu');
 
+my $gunma = romaji2hiragana ('Gunma');
+ok ($gunma eq 'ぐんま');
+my $gumma = romaji2hiragana ('Gumma');
+#print "$gumma\n";
+ok ($gumma eq 'ぐんま');
+
+my $rev_gunma = kana2romaji ($gumma);
+print "$rev_gunma\n";
+ok ($rev_gunma eq 'gunma');
+
+my $niigata = kana2romaji ('にいがた', {style => 'hepburn'});
+ok ($niigata eq 'niigata');

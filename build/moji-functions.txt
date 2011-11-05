@@ -4,6 +4,11 @@ class: romanization
 These functions convert Japanese letters to and from romanized forms.
 
 %%
+%%explain.ja:
+
+かな ⇄ ローマ字
+
+%%
 
 name: kana2romaji
 %%eg:
@@ -57,7 +62,7 @@ vowels. If you set C<< "ve_type" => "none" >>, then it does not use "h".
 
 仮名をローマ字に変換。
 
-オプションは関数の２番目のハシュリファレンスで入ります。
+オプションは関数の２番目の引数でハシュリファレンスとして入ります。
 
     use utf8;
     $romaji = kana2romaji ("しんぶん", {style => "hepburn"});
@@ -83,17 +88,19 @@ vowels. If you set C<< "ve_type" => "none" >>, then it does not use "h".
 
 =item kunrei
 
-訓令式（少学校４年で習うローマ字）
+訓令式（少学校４年で習うローマ字法）
 
 =item hepburn
 
 ヘボン式（「つづり」が「tsuzuri」, 「少女」が「shōjo」）。
+これを選べば、下記のuse_mが真になり、ve_typeがmacronになります。
 
 =back
 
 =item use_m
 
 真なら「しんぶん」が「shimbun」
+偽なら「ぐんま」が「gunma」
 
 =item ve_type
 
@@ -105,7 +112,7 @@ vowels. If you set C<< "ve_type" => "none" >>, then it does not use "h".
 
 曲折アクセントを使う。
 
-=item macro
+=item macron
 
 マクロンを使う。
 
@@ -158,6 +165,18 @@ Use an option C<< wapuro => 1 >> to convert long vowels into the
 equivalent kana rather than I<chouon>.
 
 %%
+%%desc.ja:
+
+ローマ字をカタカナに変換する。ローマ字はできるだけ幅広く受け入れる。
+ローマ字をひらがなに変換したいときはL</romaji2hiragana>をお使いください。
+
+ローマ字変換のオプションは関数の２番目の引数でハシュリファレンスとして入る。
+
+     $kana = romaji2kana ($romaji, {wapuro => 1});
+
+長音「ou」を「オー」ではなく、「オウ」にしたいときはwapuroを真にする。
+
+%%
 
 name:  romaji2hiragana
 %%eg:
@@ -173,6 +192,12 @@ Convert romanized Japanese into hiragana. This takes the same options
 as L</romaji2kana>. It also switches on the "wapuro" option which makes
 the use of long vowels with a kana rather than a chouon (long vowel
 marker).
+
+%%
+%%desc.ja:
+
+ローマ字をひらがなに変関する。オプションはL</romaji2kana>と同じ。wapuroオプション
+もオンにしたら、「ou」が「おー」ではなく、「おう」になる。
 
 %%
 
@@ -196,6 +221,13 @@ hash values, with each hash element containing "abbrev" as a short
 name and "full_name" for the full name of the style.
 
 %%
+%%desc.ja:
+
+引数があれば、その引数をローマ字方法として認めるなら真、認めないなら偽。
+
+引数がなければ、すべてのローマ字方法をハシュリファレンスの列として戻す。
+
+%%
 
 name:  is_voiced
 %%eg:
@@ -215,7 +247,7 @@ undefined value if not.
 %%
 %%desc.ja:
 
-仮名かローマ字は濁音、半濁音がついていれば、真、ついていなければ偽です。
+仮名かローマ字は濁音（゛）、半濁音（゜）がついていれば、真、ついていなければ偽（undef)。
 
 %%
 
@@ -269,6 +301,11 @@ in writing. It does not provide a standardized or
 officially-sanctioned form of romanization.
 
 %%
+%%desc.ja:
+
+C<normalize_romaji>はかなやローマ字で書いた言葉を比べるため、かなやローマ字の言葉を決まったローマ字の書き方になおします。この「決まった」ローマ字は本モジュール限定のもので、あくまでも違ったかなや違ったローマ字法で書いた言葉を比べるためだけのものに過ぎませんので、正式なローマ字法と間違わないように。
+
+%%
 
 class: kana
 
@@ -295,7 +332,7 @@ This does not convert chouon signs.
 %%
 %%desc.ja:
 
-平仮名をかたかなに変換します。長音符は変換しません。
+平仮名をかたかなに変換します。長音符は変わりません。（「オー」は「おう」になりません。）
 
 %%
 
@@ -438,6 +475,11 @@ Convert any of katakana, halfwidth katakana, circled katakana and
 hiragana to full width katakana.
 
 %%
+%%desc.ja:
+
+全角かたかな、ひらがな、半角かたかな、丸かたかななどあらゆる「仮名」を全角かたかなに変換する。
+
+%%
 
 class: wide
 %%explain.en:
@@ -516,6 +558,21 @@ Japan (fullwidth ASCII, 全角英数字).
 
 %%
 
+name: kana_order
+%%eg:
+
+$kana_order = kana_order ();
+
+%%desc.en:
+
+Returns an array reference containing an ordering of the kana.
+
+%%
+%%desc.ja:
+
+仮名の（適当な）順番を返す。
+
+%%
 
 class: other
 
@@ -535,6 +592,11 @@ converting to and then from morse code will result in しょっちゅう
 becoming シヨツチユウ.
 
 %%
+%%desc.ja:
+
+かなをモースコードに変換する。日本語のモースコードは「っ」など小さいかなを表現できないので、仮名をモースコードにして、モースコードからまた仮名にする場合は「しょっちゅう」が「シヨツチユウ」になる。
+
+%%
 
 name:  morse2kana
 %%eg:
@@ -549,9 +611,19 @@ expect: シヨツチユウ
 Convert Japanese Morse code into kana. Each Morse code element must be separated by whitespace from the next one. 
 
 %%
+%%desc.ja:
+
+モースコードをかなに変換する。モースコードは分かち書きが必要だ。
+
+%%
 %%bugs.en:
 
 This has not been extensively tested.
+
+%%
+%%bugs.ja:
+
+テストが不十分。
 
 %%
 
@@ -565,6 +637,11 @@ name:  kana2braille
 Converts kana into the equivalent Japanese braille (I<tenji>) forms.
 
 %%
+%%desc.ja:
+
+仮名を点字に変換する。
+
+%%
 %%bugs.en:
 
 This has not been extensively tested. This is not an adequate Japanese
@@ -576,7 +653,7 @@ convertor could start here.
 %%
 %%bugs.ja:
 
-きちんとしたテストがありません。日本語を点字に変換することはわたちがきが必要ですがこの関数はそれをしません。
+きちんとしたテストがない。日本語を点字に変換することはわたちがきが必要だがこの関数はそれをしないので、不十分な変換機能だ。
 
 %%
 
@@ -611,8 +688,8 @@ untouched.
 %%
 %%desc.ja:
 
-仮名を丸付けかたかなに変換します。丸付け「ン」がないので、ンはそのままとなります。
-丸付け片假名はユーニコード32D0〜32FEにあります。
+仮名を丸付けかたかなに変換する。丸付け「ン」がないので、ンはそのままとなる。
+丸付け片假名はユニコード32D0〜32FEにある。
 
 %%
 
@@ -629,6 +706,11 @@ $kana = circled2kana ('㋐㋑㋒㋓㋔');
 
 This function converts the "circled katakana" of Unicode into
 full-width katakana. See also L</kana2circled>.
+
+%%
+%%desc.ja:
+
+丸がついているかたかなを全角かたかなに変換する。
 
 %%
 
@@ -660,6 +742,11 @@ old/new kanji.
 
 It will not correctly convert 弁 since this has three different
 equivalents in the old system.
+
+%%
+%%bugs.ja:
+
+新旧字体の情報は適当なものだ。「弁」は旧字体が三つなので、変換不可能。
 
 %%
 
@@ -694,7 +781,11 @@ author does not know anything about cyrillization of kana, so any
 assistance in correcting this is very welcome.
 
 %%
+%%explain.ja:
 
+実験的に仮名とキリル文字の変換をする。キリル文字に詳しい方の確認がない。
+
+%%
 
 name: kana2cyrillic
 %%eg:
@@ -733,8 +824,7 @@ L<Lingua::KO::Munja>.
 %%
 %%explain.ja:
 
-かなをハングルに変換する。See also
-L<Lingua::KO::Munja>.
+かなをハングルに変換する。L<Lingua::KO::Munja>もご利用ください。
 
 %%
 %%bugs.en:
@@ -748,6 +838,15 @@ L<Lingua::KO::Munja>.
 This is based on a list found on the internet at
 L<http://kajiritate-no-hangul.com/kana.html>. There is currently no
 proof of correctness.
+
+=back
+%%bugs.ja:
+
+=over
+
+=item 「ん」を変換しない
+
+=item 確認がない
 
 =back
 

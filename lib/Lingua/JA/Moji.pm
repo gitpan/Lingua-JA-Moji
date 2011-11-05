@@ -3,48 +3,47 @@ package Lingua::JA::Moji;
 use warnings;
 use strict;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
 use utf8;
 use File::ShareDir 'dist_file';
 
-require Exporter;
-
-our @ISA = qw(Exporter);
+use parent 'Exporter';
 
 our @EXPORT_OK = qw/
-                    kana2romaji
-                    romaji2hiragana
-                    romaji_styles
-                    romaji2kana
-                    is_voiced
-                    is_romaji
-                    hira2kata
-                    kata2hira
-                    kana2hw
-                    hw2katakana
                     InHankakuKatakana
-                    wide2ascii
-                    ascii2wide
                     InWideAscii
-                    kana2morse
-                    morse2kana
-                    is_kana
-                    is_hiragana
-                    kana2katakana
-                    kana2braille
+                    ascii2wide
                     braille2kana
-                    kana2circled
                     circled2kana
-                    normalize_romaji
-                    new2old_kanji
-                    old2new_kanji
-                    kana2cyrillic
                     cyrillic2katakana
-                    romaji_vowel_styles
+                    hira2kata
+                    hw2katakana
+                    is_hiragana
+                    is_kana
+                    is_romaji
+                    is_voiced
+                    kana2braille
+                    kana2circled
+                    kana2cyrillic
                     kana2hangul
+                    kana2hw
+                    kana2katakana
+                    kana2morse
+                    kana2romaji
+                    kana_order
+                    kata2hira
+                    morse2kana
+                    new2old_kanji
+                    normalize_romaji
+                    old2new_kanji
+                    romaji2hiragana
+                    romaji2kana
+                    romaji_styles
+                    romaji_vowel_styles
+                    wide2ascii
                     /;
 
 our %EXPORT_TAGS = (
@@ -208,8 +207,9 @@ sub invert
 # Kana ordered by consonant. Adds bogus "q" gyou for small vowels and
 # "x" gyou for youon (ya, yu, yo) to the usual ones.
 
-my %行 = (
+my @行 = (
     a => [qw/ア イ ウ エ オ/],
+    q => [qw/ァ ィ ゥ ェ ォ/],
     k => [qw/カ キ ク ケ コ/],
     g => [qw/ガ ギ グ ゲ ゴ/],
     s => [qw/サ シ ス セ ソ/],
@@ -225,9 +225,18 @@ my %行 = (
     xy => [qw/ャ    ュ    ョ/],
     r => [qw/ラ リ ル レ ロ/],
     w => [qw/ワ ヰ    ヱ ヲ/],
-    q => [qw/ァ ィ ゥ ェ ォ/],
     v => [qw/ヴ/],
 );
+
+my %行 = @行;
+
+sub kana_order
+{
+    # I don't know if it's necessary to copy the array or not, but I don't
+    # want to take a chance messing up the array.
+    my @copy = @行;
+    return \@copy;
+}
 
 # Kana => consonant mapping.
 
@@ -333,10 +342,10 @@ my @あいうえお = qw/a i u e o ou/;
 
 my %長音表記;
 @{$長音表記{circumflex}}{@あいうえお} = qw/â  î  û  ê  ô  ô/;
-@{$長音表記{macron}}{@あいうえお}     = qw/ā  ī  ū  ē  ō  ō/;
+@{$長音表記{macron}}{@あいうえお}     = qw/ā  ii  ū  ē  ō  ō/;
 @{$長音表記{wapuro}}{@あいうえお}     = qw/aa ii uu ee oo ou/;
 @{$長音表記{passport}}{@あいうえお}   = qw/a  i  u  e  oh oh/;
-@{$長音表記{none}}{@あいうえお}       = qw/a  i  u  e  o  o/;
+@{$長音表記{none}}{@あいうえお}       = qw/a  ii  u  e  o  o/;
 
 sub kana2romaji
 {
@@ -560,6 +569,9 @@ sub romaji2kana
 	$romaji_regex = make_regex (keys %$romaji2katakana);
     }
     my ($input, $options) = @_;
+    if (! defined $input) {
+        return;
+    }
     $input = lc $input;
     #print "input = $input\n";
     # Deal with long vowels
@@ -570,7 +582,8 @@ sub romaji2kana
     }
     # Deal with double consonants
     # danna -> だんな
-    $input =~ s/n(?=n[aiueo])/ン/g;
+    # gumma -> gunma
+    $input =~ s/[nm](?=[nm][aiueo])/ン/g;
     # shimbun -> しんぶん
     $input =~ s/m(?=[pb]y?[aiueo])/ン/g;
     # tcha, ccha -> っちゃ
@@ -622,6 +635,9 @@ sub is_romaji
 sub hira2kata
 {
     my (@input) = @_;
+    if (!@input) {
+        return;
+    }
     for (@input) {tr/ぁ-ん/ァ-ン/}
     return wantarray ? @input : "@input";
 }
