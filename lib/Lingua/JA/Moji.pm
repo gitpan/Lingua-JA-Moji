@@ -1,16 +1,17 @@
 package Lingua::JA::Moji;
 
+require Exporter;
+@ISA = qw(Exporter);
+
 use warnings;
 use strict;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
 use utf8;
 use File::ShareDir 'dist_file';
-
-use parent 'Exporter';
 
 our @EXPORT_OK = qw/
                     InHankakuKatakana

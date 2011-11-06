@@ -3,7 +3,7 @@ author:
   - 'Ben Bullock bkb@cpan.org'
   -
     ABSTRACT: ~
-    AUTHOR: 'Ben Bullock bkb@cpan.org, HASH(0x28c54f60)'
+    AUTHOR: 'Ben Bullock bkb@cpan.org, HASH(0x28e2c150)'
     BUILD_REQUIRES:
       ExtUtils::MakeMaker: 6.36
       Test::More: 0
@@ -14,7 +14,7 @@ author:
     PREREQ_PM:
       Convert::Moji: 0.03
       File::ShareDir: 0
-    VERSION: 0.09
+    VERSION: 0.10
     VERSION_FROM: lib/Lingua/JA/Moji.pm
     realclean:
       FILES: MYMETA.yml
@@ -44,4 +44,4 @@ requires:
   File::ShareDir: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.09
+version: 0.10
