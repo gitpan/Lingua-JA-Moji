@@ -481,6 +481,18 @@ hiragana to full width katakana.
 
 %%
 
+name: kana_to_large
+%%explain.en:
+
+Convert small-sized kana such as ぁ into full-sized kana such as あ.
+
+%%
+%%explain.ja:
+
+「ぁ」など小さい仮名を「あ」に変換する。
+
+%%
+
 class: wide
 %%explain.en:
 
@@ -805,7 +817,6 @@ $kana = cyrillic2katakana ('симбун');
 out: $kana
 expect: シンブン
 
-
 class: hangul
 
 name: kana2hangul
@@ -851,3 +862,4 @@ proof of correctness.
 =back
 
 %%
+

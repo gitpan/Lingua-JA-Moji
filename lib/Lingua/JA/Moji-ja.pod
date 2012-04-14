@@ -435,6 +435,16 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
+=head2 kana_to_large 
+
+    use Lingua::JA::Moji 'kana_to_large';
+
+
+
+
+
+
+
 
 
 =head1 全角英数字
@@ -872,7 +882,7 @@ Ben Bullock, C<< <bkb@cpan.org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008-2011 Ben Bullock, all rights reserved.
+Copyright 2008-2012 Ben Bullock, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
