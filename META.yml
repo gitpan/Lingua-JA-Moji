@@ -25,5 +25,8 @@ requires:
   Convert::Moji: 0.03
   File::ShareDir: 0
 resources:
+  MailingList: http://groups.google.com/group/perl-moji
+  bugtracker: https://github.com/benkasminbullock/Lingua-JA-Moji/issues
   license: http://dev.perl.org/licenses/
-version: 0.11
+  repository: https://github.com/benkasminbullock/Lingua-JA-Moji
+version: 0.12

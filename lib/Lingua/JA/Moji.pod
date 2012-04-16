@@ -851,6 +851,26 @@ proof of correctness.
 
 
 
+
+=head2 katakana2hw -- Convert katakana to halfwidth katakana
+
+    use Lingua::JA::Moji 'katakana2hw';
+
+    $hw = katakana2hw ("あいうえおアイウエオ");
+    # Now $hw = 'あいうえおｱｲｳｴｵ'
+
+
+
+
+Convert katakana to halfwidth katakana, leaving hiragana unchanged.
+
+
+
+
+
+
+
+
 =head1 SUPPORT
 
 =head2 Mailing list
@@ -904,6 +924,11 @@ Validate romanized Japanese.
 =item L<Lingua::JA::Fold>
 
 Full/half width conversion, collation of Japanese text.
+
+=item L<Lingua::JA::Regular::Unicode>
+
+Unicode-based conversions very similar to this module, including
+halfwidth katakana conversions and wide/ascii conversions.
 
 =back
 
