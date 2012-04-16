@@ -348,7 +348,7 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
-あらゆる仮名文字を半角カタカナに変換する。
+あらゆる仮名文字を半角カタカナに変換する。かたかなのみを変換する場合はL</katakana2hw>を使ってください。
 
 
 
@@ -406,7 +406,7 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
-入力が平仮名のみの場合、真、入力が平仮名なでない文字を含む場合、偽(undef)。
+入力が平仮名のみの場合、真、入力が平仮名なでない文字を含む場合、偽(undef)。「ー」があれば偽になる。
 
 
 
@@ -438,6 +438,55 @@ expressions with C<\p> which can validate halfwidth katakana.
 =head2 kana_to_large 
 
     use Lingua::JA::Moji 'kana_to_large';
+
+    my $large = kana_to_large ('ぁあぃい');
+    # Now $large = 'ああいい'
+
+
+
+
+「ぁ」など小さい仮名を「あ」に変換する。
+
+
+
+
+
+
+
+
+
+=head2 kana_order 
+
+    use Lingua::JA::Moji 'kana_order';
+
+    $kana_order = kana_order ();
+
+
+
+
+仮名の（適当な）順番を返す。
+
+
+
+
+
+
+
+
+
+=head2 katakana2hw -- カタカナを半角カタカナに
+
+    use Lingua::JA::Moji 'katakana2hw';
+
+    $hw = katakana2hw ("あいうえおアイウエオ");
+    # Now $hw = 'あいうえおｱｲｳｴｵ'
+
+
+
+
+全角かたかなを半角かたかなに変換し、ひらがなをそのままにする。L</kana2hw>も参照。
+
+
 
 
 
@@ -512,25 +561,6 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 半角英数字(ASCII)を全角英数字に変換する。
-
-
-
-
-
-
-
-
-
-=head2 kana_order 
-
-    use Lingua::JA::Moji 'kana_order';
-
-    $kana_order = kana_order ();
-
-
-
-
-仮名の（適当な）順番を返す。
 
 
 
@@ -808,26 +838,6 @@ Converts Japanese braille (I<tenji>) into the equivalent katakana.
 
 
 
-
-=head2 katakana2hw -- カタカナを半角カタカナに
-
-    use Lingua::JA::Moji 'katakana2hw';
-
-    $hw = katakana2hw ("あいうえおアイウエオ");
-    # Now $hw = 'あいうえおｱｲｳｴｵ'
-
-
-
-
-Convert katakana to halfwidth katakana, leaving hiragana unchanged.
-
-
-
-
-
-
-
-
 =head1 SUPPORT
 
 =head2 Mailing list
@@ -886,6 +896,16 @@ Full/half width conversion, collation of Japanese text.
 
 Unicode-based conversions very similar to this module, including
 halfwidth katakana conversions and wide/ascii conversions.
+
+=back
+
+=head2 Other modules
+
+=over
+
+=item L<Lingua::KO::Munja>
+
+This is an effort similar to the present module, but for Korean.
 
 =back
 
