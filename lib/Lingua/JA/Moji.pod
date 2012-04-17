@@ -15,7 +15,7 @@ Convert various types of Japanese characters into one another.
     my $kana = romaji2kana ($romaji);
     # $kana is now 'アイウエオ'.
 
-=head1 description
+=head1 DESCRIPTION
 
 This module provides methods to convert different written forms of
 Japanese into one another.
@@ -806,6 +806,87 @@ Convert old-style (pre-1949) kanji (Chinese characters) into new-style
 
 
 
+=head2 circled2kanji 
+
+    use Lingua::JA::Moji 'circled2kanji';
+
+    $kanji = circled2kanji ('㊯');
+    # Now $kanji = '協'
+
+
+
+
+Convert the circled forms of kanji into their uncircled equivalents.
+
+
+
+
+
+
+
+
+
+=head2 kanji2circled 
+
+    use Lingua::JA::Moji 'kanji2circled';
+
+    $kanji = kanji2circled ('協嬉');
+    # Now $kanji = '㊯嬉'
+
+
+
+
+Convert the usual forms of kanji into circled equivalents, if they
+exist. Note that only a limited number of kanji have circled forms.
+
+
+
+
+
+
+
+
+
+=head2 bracketed2kanji 
+
+    use Lingua::JA::Moji 'bracketed2kanji';
+
+    $kanji = bracketed2kanji ('㈱');
+    # Now $kanji = '株'
+
+
+
+
+Convert bracketed form of kanji into unbracketed form.
+
+
+
+
+
+
+
+
+
+=head2 kanji2bracketed 
+
+    use Lingua::JA::Moji 'kanji2bracketed';
+
+    $kanji = kanji2bracketed ('株');
+    # Now $kanji = '㈱'
+
+
+
+
+Convert unbracketed form of kanji into bracketed form, if it exists.
+
+
+
+
+
+
+
+
+
 
 
 =head1 CYRILLIZATION
@@ -886,6 +967,16 @@ proof of correctness.
 
 
 =head1 SUPPORT
+
+=head2 Repository
+
+You can download and modify the source code at
+L</https://github.com/benkasminbullock/Lingua-JA-Moji>.
+
+=head2 Reporting a bug or requesting an enhancement
+
+You can report a bug or request an enhancement using the L</Mailing
+list> or using the "issue" facility of github.com.
 
 =head2 Mailing list
 

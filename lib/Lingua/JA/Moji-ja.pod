@@ -766,6 +766,86 @@ Converts Japanese braille (I<tenji>) into the equivalent katakana.
 
 
 
+=head2 circled2kanji 
+
+    use Lingua::JA::Moji 'circled2kanji';
+
+    $kanji = circled2kanji ('㊯');
+    # Now $kanji = '協'
+
+
+
+
+丸付け漢字を普通の漢字に変換する。
+
+
+
+
+
+
+
+
+
+=head2 kanji2circled 
+
+    use Lingua::JA::Moji 'kanji2circled';
+
+    $kanji = kanji2circled ('協嬉');
+    # Now $kanji = '㊯嬉'
+
+
+
+
+漢字を丸付け漢字に変換する。
+
+
+
+
+
+
+
+
+
+=head2 bracketed2kanji 
+
+    use Lingua::JA::Moji 'bracketed2kanji';
+
+    $kanji = bracketed2kanji ('㈱');
+    # Now $kanji = '株'
+
+
+
+
+括弧漢字を普通の漢字に変換する。
+
+
+
+
+
+
+
+
+
+=head2 kanji2bracketed 
+
+    use Lingua::JA::Moji 'kanji2bracketed';
+
+    $kanji = kanji2bracketed ('株');
+    # Now $kanji = '㈱'
+
+
+
+
+普通の漢字を括弧漢字をに変換する。
+
+
+
+
+
+
+
+
+
 
 
 =head1 日本語のキリル文字表記
@@ -839,6 +919,16 @@ Converts Japanese braille (I<tenji>) into the equivalent katakana.
 
 
 =head1 SUPPORT
+
+=head2 Repository
+
+You can download and modify the source code at
+L</https://github.com/benkasminbullock/Lingua-JA-Moji>.
+
+=head2 Reporting a bug or requesting an enhancement
+
+You can report a bug or request an enhancement using the L</Mailing
+list> or using the "issue" facility of github.com.
 
 =head2 Mailing list
 

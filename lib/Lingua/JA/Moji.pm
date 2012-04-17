@@ -6,7 +6,7 @@ require Exporter;
 use warnings;
 use strict;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
@@ -47,6 +47,10 @@ our @EXPORT_OK = qw/
                     romaji_styles
                     romaji_vowel_styles
                     wide2ascii
+                    circled2kanji
+                    kanji2circled
+                    bracketed2kanji
+                    kanji2bracketed
                     /;
 
 our %EXPORT_TAGS = (
@@ -723,9 +727,9 @@ sub katakana2hw
 sub hw2katakana
 {
     my ($input) = @_;
-   if (!$kata2hw) {
-       $kata2hw = make_convertors ('katakana','hw_katakana');
-   }
+    if (!$kata2hw) {
+        $kata2hw = make_convertors ('katakana','hw_katakana');
+    }
     return $kata2hw->invert ($input);
 }
 
@@ -822,7 +826,7 @@ my $kana2braille;
 sub load_kana2braille
 {
     if (!$kana2braille) {
-	$kana2braille = Lingua::JA::Moji::make_convertors ('katakana', 'braille');
+	$kana2braille = make_convertors ('katakana', 'braille');
     }
 }
 
@@ -888,10 +892,16 @@ sub brailletransinv {s/([⠐⠠])(.)/$2$1/g;return $_}
 sub kana2braille2
 {
     my $conv = Convert::Moji->new (["table", \%濁点],
-				   ["code", \&brailleon,\&brailleback],
+				   ["code",
+                                    \& brailleon,
+                                    \& brailleback
+                                   ],
 				   ["file", getdistfile ("katakana2braille")],
-				   ["code", \&brailletrans,\&brailletransinv],
-			       );
+				   ["code",
+                                    \& brailletrans,
+                                    \& brailletransinv
+                                   ],
+			          );
     return $conv;
 }
 
@@ -933,7 +943,6 @@ sub load_circled_conv
 {
     if (!$circled_conv) {
 	$circled_conv = make_convertors ("katakana", "circled");
-
     }
 }
 
@@ -1066,7 +1075,62 @@ sub kana_to_large
     my ($kana) = @_;
     $kana =~ tr/ゃゅょぁぃぅぇぉっゎ/やゆよあいうえおつわ/;
     $kana =~ tr/ャュョァィゥェォッヮ/ヤユヨアイウエオツワ/;
+    # Katakana phonetic extensions.
+    $kana =~ tr/ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ/クシストヌハヒフヘホムラリルレロ/;
     return $kana;
+}
+
+my $circled2kanji;
+
+sub load_circled2kanji
+{
+    if (! $circled2kanji) {
+        $circled2kanji =
+        Convert::Moji->new (["file",
+                             getdistfile ('circled2kanji')]);
+    }
+    if (! $circled2kanji) {
+        die "ERROR";
+    }
+}
+
+sub circled2kanji
+{
+    my ($input) = @_;
+    load_circled2kanji ();
+    return $circled2kanji->convert ($input);
+}
+
+sub kanji2circled
+{
+    my ($input) = @_;
+    load_circled2kanji ();
+    return $circled2kanji->invert ($input);
+}
+
+my $bracketed2kanji;
+
+sub load_bracketed2kanji
+{
+    if (! $bracketed2kanji) {
+        $bracketed2kanji =
+        Convert::Moji->new (["file",
+                             getdistfile ('bracketed2kanji')]);
+    }
+}
+
+sub bracketed2kanji
+{
+    my ($input) = @_;
+    load_bracketed2kanji ();
+    return $bracketed2kanji->convert ($input);
+}
+
+sub kanji2bracketed
+{
+    my ($input) = @_;
+    load_bracketed2kanji ();
+    return $bracketed2kanji->invert ($input);
 }
 
 1; 
