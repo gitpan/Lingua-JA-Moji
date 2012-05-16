@@ -541,7 +541,11 @@ characters.
 =head1 WIDE ASCII
 
 
-Almost every website in Japan requires users to input numbers and letters using "half width" characters. Use these functions and that is not necessary.
+Functions for handling the "wide ascii" which is sometimes used in
+Japan. The "wide ascii" is a legacy of bitmapped fonts which has
+survived into the present day. "Wide ascii" characters were special
+bitmapped font characters created to be the same size as one kanji or
+kana character.
 
 
 
@@ -663,7 +667,7 @@ Convert Japanese Morse code into kana. Each Morse code element must be separated
 
 
 
-=head3 bugs
+=head3 Bugs
 
 This has not been extensively tested.
 
@@ -689,7 +693,7 @@ Converts kana into the equivalent Japanese braille (I<tenji>) forms.
 
 
 
-=head3 bugs
+=head3 Bugs
 
 This has not been extensively tested. This is not an adequate Japanese
 braille convertor. Creating Japanese braille requires breaking
@@ -792,7 +796,7 @@ Convert new-style (post-1949) kanji (Chinese characters) into old-style (pre-194
 
 
 
-=head3 bugs
+=head3 Bugs
 
 The list of characters in this convertor may not contain every pair of
 old/new kanji.
@@ -969,7 +973,7 @@ assistance in correcting this is very welcome.
 
 
 
-=head3 bugs
+=head3 Bugs
 
 =over
 
@@ -989,74 +993,10 @@ proof of correctness.
 
 =head1 SUPPORT
 
-=head2 Repository
-
-You can download and modify the source code at
-L</https://github.com/benkasminbullock/Lingua-JA-Moji>.
-
-=head2 Reporting a bug or requesting an enhancement
-
-You can report a bug or request an enhancement using the L</Mailing
-list> or using the "issue" facility of github.com.
-
 =head2 Mailing list
 
 There is a mailing list for this module and L<Convert::Moji> at
 L<http://groups.google.com/group/perl-moji>. 
-
-=head1 DIAGNOSTICS
-
-=head1 bugs
-
-=over
-
-=item romaji to/from kana conversion
-
-There are some bugs with romaji to kana conversion and vice-versa.
-
-=back
-
-=head1 SEE ALSO
-
-Other Perl modules on CPAN include
-
-=head2 Japanese kana/romanization
-
-=over
-
-=item L<Data::Validate::Japanese>
-
-This is where I got several of the ideas for this module from. It
-contains validators for kanji and kana.
-
-=item L<Lingua::JA::Kana>
-
-This is where several of the ideas for this module came from. It
-contains convertors for hiragana, half width and full width katakana,
-and romaji. The romaji conversion is less complete than this module
-but more compact and probably much faster.
-
-=item L<Lingua::JA::Romanize::Japanese>
-
-Romanization of Japanese. The module also includes romanization of
-kanji via the kakasi kanji to romaji convertor, and other functions.
-
-=item L<Lingua::JA::Romaji::Valid>
-
-Validate romanized Japanese.
-
-=item L<Lingua::JA::Hepburn::Passport>
-
-=item L<Lingua::JA::Fold>
-
-Full/half width conversion, collation of Japanese text.
-
-=item L<Lingua::JA::Regular::Unicode>
-
-Unicode-based conversions very similar to this module, including
-halfwidth katakana conversions and wide/ascii conversions.
-
-=back
 
 =head2 Other modules
 
@@ -1064,7 +1004,7 @@ halfwidth katakana conversions and wide/ascii conversions.
 
 =item L<Lingua::KO::Munja>
 
-This is an effort similar to the present module, but for Korean.
+This is similar to the present module for Korean.
 
 =back
 
