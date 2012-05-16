@@ -457,7 +457,7 @@ hiragana to full width katakana.
 
     use Lingua::JA::Moji 'kana_to_large';
 
-    my $large = kana_to_large ('ぁあぃい');
+    $large = kana_to_large ('ぁあぃい');
     # Now $large = 'ああいい'
 
 
@@ -506,6 +506,27 @@ useful for looping over the kana or sorting.
 
 Convert katakana to halfwidth katakana, leaving hiragana
 unchanged. See also L</kana2hw>.
+
+
+
+
+
+
+
+
+
+=head2 InKana 
+
+    use Lingua::JA::Moji 'InKana';
+
+    $is_kana = ('あいうえお' =~ /^\p{InKana}+$/);
+    # Now $is_kana = '1'
+
+
+
+
+A character class for use in regular expressions which matches kana
+characters.
 
 
 

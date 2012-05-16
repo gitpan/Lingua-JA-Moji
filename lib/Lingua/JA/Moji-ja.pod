@@ -439,7 +439,7 @@ expressions with C<\p> which can validate halfwidth katakana.
 
     use Lingua::JA::Moji 'kana_to_large';
 
-    my $large = kana_to_large ('ぁあぃい');
+    $large = kana_to_large ('ぁあぃい');
     # Now $large = 'ああいい'
 
 
@@ -485,6 +485,26 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 全角かたかなを半角かたかなに変換し、ひらがなをそのままにする。L</kana2hw>も参照。
+
+
+
+
+
+
+
+
+
+=head2 InKana 
+
+    use Lingua::JA::Moji 'InKana';
+
+    $is_kana = ('あいうえお' =~ /^\p{InKana}+$/);
+    # Now $is_kana = '1'
+
+
+
+
+正規表現に使うカタカナとひらがなにマッチする。
 
 
 

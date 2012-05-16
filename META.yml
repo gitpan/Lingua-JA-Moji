@@ -20,7 +20,8 @@ no_index:
     - build
 requires:
   Convert::Moji: 0.03
+  perl: 5.008009
 resources:
   bugtracker: https://github.com/benkasminbullock/Lingua-JA-Moji/issues
   repository: https://github.com/benkasminbullock/Lingua-JA-Moji
-version: 0.15
+version: 0.16
