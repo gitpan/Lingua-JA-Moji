@@ -6,7 +6,7 @@ require Exporter;
 use warnings;
 use strict;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
@@ -353,10 +353,6 @@ sub kana2romaji
     # Parse the options
 
     my ($input, $options) = @_;
-    if (! utf8::is_utf8 ($input)) {
-        carp "Input is not flagged as unicode: conversion will fail.";
-        return;
-    }
     $input = kana2katakana ($input);
     $options = {} if ! $options;
     my $debug = $options->{debug};
