@@ -96,11 +96,11 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
 
 =item undef
 
-曲折アクセントを使う。
+曲折アクセント(ô)を使う。
 
 =item macron
 
-マクロンを使う。
+マクロン(ō)を使う。
 
 =item passport
 
@@ -272,6 +272,11 @@ C<normalize_romaji>はかなやローマ字で書いた言葉を比べるため�
 =head1 仮名
 
 
+仮名を仮名に変換すること。
+
+
+
+
 
 
 
@@ -306,6 +311,45 @@ C<normalize_romaji>はかなやローマ字で書いた言葉を比べるため�
 
 
 かたかなを平仮名に変換します。長音符は変換しません。
+
+
+
+
+
+
+
+
+
+=head2 kana2katakana -- 仮名をカタカナに
+
+    use Lingua::JA::Moji 'kana2katakana';
+
+    
+
+
+
+
+全角かたかな、ひらがな、半角かたかな、丸かたかななどあらゆる「仮名」を全角かたかなに変換する。
+
+
+
+
+
+
+
+
+
+=head2 kana_to_large 
+
+    use Lingua::JA::Moji 'kana_to_large';
+
+    $large = kana_to_large ('ぁあぃい');
+    # Now $large = 'ああいい'
+
+
+
+
+「ぁ」など小さい仮名を「あ」に変換する。
 
 
 
@@ -378,6 +422,26 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
+=head2 katakana2hw -- カタカナを半角カタカナに
+
+    use Lingua::JA::Moji 'katakana2hw';
+
+    $hw = katakana2hw ("あいうえおアイウエオ");
+    # Now $hw = 'あいうえおｱｲｳｴｵ'
+
+
+
+
+全角かたかなを半角かたかなに変換し、ひらがなをそのままにする。L</kana2hw>も参照。
+
+
+
+
+
+
+
+
+
 =head2 is_kana 
 
     use Lingua::JA::Moji 'is_kana';
@@ -416,45 +480,6 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
-=head2 kana2katakana -- 仮名をカタカナに
-
-    use Lingua::JA::Moji 'kana2katakana';
-
-    
-
-
-
-
-全角かたかな、ひらがな、半角かたかな、丸かたかななどあらゆる「仮名」を全角かたかなに変換する。
-
-
-
-
-
-
-
-
-
-=head2 kana_to_large 
-
-    use Lingua::JA::Moji 'kana_to_large';
-
-    $large = kana_to_large ('ぁあぃい');
-    # Now $large = 'ああいい'
-
-
-
-
-「ぁ」など小さい仮名を「あ」に変換する。
-
-
-
-
-
-
-
-
-
 =head2 kana_order 
 
     use Lingua::JA::Moji 'kana_order';
@@ -465,26 +490,6 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 仮名の（適当な）順番を返す。
-
-
-
-
-
-
-
-
-
-=head2 katakana2hw -- カタカナを半角カタカナに
-
-    use Lingua::JA::Moji 'katakana2hw';
-
-    $hw = katakana2hw ("あいうえおアイウエオ");
-    # Now $hw = 'あいうえおｱｲｳｴｵ'
-
-
-
-
-全角かたかなを半角かたかなに変換し、ひらがなをそのままにする。L</kana2hw>も参照。
 
 
 
@@ -981,6 +986,5 @@ under the same terms as Perl itself.
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to Naoki Tomita for various assitances (see
-L<http://groups.google.com/group/perl-moji/browse_thread/thread/10a42c35f7c22ebc>).
+Thanks to Naoki Tomita.
 
