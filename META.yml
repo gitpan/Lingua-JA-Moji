@@ -24,4 +24,4 @@ requires:
 resources:
   bugtracker: https://github.com/benkasminbullock/Lingua-JA-Moji/issues
   repository: https://github.com/benkasminbullock/Lingua-JA-Moji
-version: 0.19
+version: 0.20
