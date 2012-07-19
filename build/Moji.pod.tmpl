@@ -1,0 +1,107 @@
+=encoding UTF-8
+
+=head1 [% trans.name | upper %]
+
+Lingua::JA::Moji - [% trans.abstract %]
+
+=head1 [% trans.synopsis | upper %]
+
+[% trans.synopsis_text %]
+
+    use Lingua::JA::Moji qw/kana2romaji romaji2kana/;
+    use utf8;
+    my $romaji = kana2romaji ('あいうえお');
+    # $romaji is now 'aiueo'.
+    my $kana = romaji2kana ($romaji);
+    # $kana is now 'アイウエオ'.
+
+=head1 [% trans.description | upper %]
+
+[% trans.description_body %]
+
+[%- FOR function IN functions %]
+
+[%- IF function.defined ('class') %]
+
+[% class = function.class %]
+
+=head1 [% trans.$class | upper %]
+[% IF function.defined ('explain') %]
+[% function.explain.$lang %]
+[% END %]
+[% ELSE %]
+
+=head2 [% function.name %] [% IF function.defined ('abstract') -%]
+-- [% function.abstract.$lang %]
+[%- END %]
+
+    use [% module %] '[% function.name %]';
+[% IF function.defined ('eg') %]
+[% function.eg | indent ('    ') %]
+[%- IF function.defined ('out') && function.defined ('expect') %]
+    # Now [% function.out %] = '[% function.expect %]'
+[%- END %]
+[% END %]
+[% IF function.desc.defined (lang) %]
+
+[% function.desc.$lang %]
+
+[% END %]
+
+[%- IF function.defined ('bugs') %]
+
+=head3 [% trans.bugs %]
+
+[%- function.bugs.$lang %]
+
+[%- END %]
+
+[%- END %]
+
+[%- END %]
+
+=head1 SUPPORT
+
+=head2 Mailing list
+
+There is a mailing list for this module and L<Convert::Moji> at
+L<http://groups.google.com/group/perl-moji>. 
+
+=head2 Other modules
+
+=over
+
+=item L<Lingua::KO::Munja>
+
+This is similar to the present module for Korean.
+
+=back
+
+=head2 Books
+
+[% trans.naokitomitabook %]
+
+=head1 EXPORT
+
+This module exports its functions only on request. To export all the
+functions in the module,
+
+    use Lingua::JA::Moji ':all';
+
+=head1 [% trans.author | upper %]
+
+Ben Bullock, C<< <bkb@cpan.org> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2008-2012 Ben Bullock, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Naoki Tomita.
+

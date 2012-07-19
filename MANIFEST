@@ -1,6 +1,8 @@
-MANIFEST			This list of files
-MANIFEST.SKIP
-Makefile.PL
+build.pl
+build/make-pod.pl
+build/moji-functions.txt
+build/moji-trans.txt
+build/Moji.pod.tmpl
 lib/Lingua/JA/Moji-ja.pod
 lib/Lingua/JA/Moji.pm
 lib/Lingua/JA/Moji.pod
@@ -17,18 +19,25 @@ lib/Lingua/JA/Moji/katakana2morse.txt
 lib/Lingua/JA/Moji/new_kanji2old_kanji.txt
 lib/Lingua/JA/Moji/rest2hangul.txt
 lib/Lingua/JA/Moji/romaji2katakana.txt
-t/InHankakuKatakana.t
-t/InKana.t
-t/InWideAscii.t
-t/Lingua-JA-Moji.t
+Makefile.PL
+makeitfile
+MANIFEST			This list of files
+MANIFEST.SKIP
+MYMETA.json
+MYMETA.yml
 t/circled.t
+t/coverage.t
 t/cyrillic.t
 t/hangul.t
 t/hw.t
 t/hw2katakana.t
+t/InHankakuKatakana.t
+t/InKana.t
+t/InWideAscii.t
+t/is-romaji.t
+t/Lingua-JA-Moji.t
 t/lingua-ja-regular-unicode.t
 t/new-old-kanji.t
 t/romaji2kana.t
-t/coverage.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)
