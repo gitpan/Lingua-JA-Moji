@@ -1,8 +1,3 @@
-build.pl
-build/make-pod.pl
-build/moji-functions.txt
-build/moji-trans.txt
-build/Moji.pod.tmpl
 lib/Lingua/JA/Moji-ja.pod
 lib/Lingua/JA/Moji.pm
 lib/Lingua/JA/Moji.pod
@@ -20,7 +15,6 @@ lib/Lingua/JA/Moji/new_kanji2old_kanji.txt
 lib/Lingua/JA/Moji/rest2hangul.txt
 lib/Lingua/JA/Moji/romaji2katakana.txt
 Makefile.PL
-makeitfile
 MANIFEST			This list of files
 MANIFEST.SKIP
 MYMETA.json
