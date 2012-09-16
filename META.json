@@ -33,7 +33,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Convert::Moji" : "0.03",
+            "Convert::Moji" : "0.05",
             "perl" : "5.008009"
          }
       }
@@ -47,5 +47,5 @@
          "url" : "https://github.com/benkasminbullock/Lingua-JA-Moji"
       }
    },
-   "version" : "0.22"
+   "version" : "0.23"
 }
