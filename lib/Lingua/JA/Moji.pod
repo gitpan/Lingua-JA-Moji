@@ -542,6 +542,28 @@ useful for looping over the kana or sorting.
 
 
 
+=head2 katakana2syllable 
+
+    use Lingua::JA::Moji 'katakana2syllable';
+
+    $syllables = katakana2syllable ('ソーシャルブックマークサービス');
+
+
+
+
+This breaks the given string into syllables. If the string is broken
+up character by character, it becomes 'ソ', 'ー', 'シ', 'ャ', 'ル'.
+This breaks the string up into meaningful syllables, so that
+C<$syllables> becomes 'ソー', 'シャ', 'ル'.
+
+
+
+
+
+
+
+
+
 =head2 InKana 
 
     use Lingua::JA::Moji 'InKana';

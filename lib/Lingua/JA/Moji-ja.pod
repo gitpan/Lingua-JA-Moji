@@ -499,6 +499,27 @@ expressions with C<\p> which can validate halfwidth katakana.
 
 
 
+=head2 katakana2syllable 
+
+    use Lingua::JA::Moji 'katakana2syllable';
+
+    $syllables = katakana2syllable ('ソーシャルブックマークサービス');
+
+
+
+
+カタカナをシラブルにわける。たとえば、「ソーシャル」
+は'ソ', 'ー', 'シ', 'ャ', 'ル'という意味のない文字ではなく、日本語の
+「原子」の'ソー', 'シャ', 'ル'になる。
+
+
+
+
+
+
+
+
+
 =head2 InKana 
 
     use Lingua::JA::Moji 'InKana';

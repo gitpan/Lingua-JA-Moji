@@ -22,6 +22,7 @@ MYMETA.yml
 t/circled.t
 t/coverage.t
 t/cyrillic.t
+t/furagu.t
 t/hangul.t
 t/hw.t
 t/hw2katakana.t
@@ -29,6 +30,7 @@ t/InHankakuKatakana.t
 t/InKana.t
 t/InWideAscii.t
 t/is-romaji.t
+t/katakana2syllable.t
 t/Lingua-JA-Moji.t
 t/lingua-ja-regular-unicode.t
 t/new-old-kanji.t
