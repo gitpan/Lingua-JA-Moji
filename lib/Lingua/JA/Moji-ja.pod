@@ -149,7 +149,7 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
 
      $kana = romaji2kana ($romaji, {wapuro => 1});
 
-長音「ou」を「オー」ではなく、「オウ」にしたいときはwapuroを真にする。
+長音「ou」を「オー」ではなく、「オウ」にしたいときはwapuroを真にする C<< wapuro => 1 >>。
 
 
 
@@ -372,7 +372,7 @@ C<normalize_romaji>はかなやローマ字で書いた言葉を比べるため�
 
 
 C<InHankakuKatakana> is a character class for use in regular
-expressions with C<\p> which can validate halfwidth katakana.
+expressions with C<\p> which can validate L</halfwidth katakana>.
 
 
 
@@ -958,6 +958,8 @@ Converts Japanese braille (I<tenji>) into the equivalent katakana.
 
 =back
 
+L<http://kajiritate-no-hangul.com/kana.html>を使ってみましたがただしいかどうか証明がありません。
+
 
 
 
@@ -972,7 +974,58 @@ L<http://groups.google.com/group/perl-moji>.
 
 =head2 Other modules
 
+=head1 SEE ALSO
+
+Other Perl modules on CPAN include
+
+=head2 Japanese kana/romanization
+
 =over
+
+=item L<Data::Validate::Japanese>
+
+This contains four validators for kanji and kana, C<is_hiragana>,
+corresponding to L</is_hiragana> in this module, and three more,
+C<is_kanji>, C<is_katakana>, and C<is_h_katakana>, for half-width
+katakana.
+
+=item L<Lingua::JA::Kana>
+
+This contains convertors for hiragana, half width and full width
+katakana, and romaji. As of version 0.07 [Aug 06, 2012], the romaji
+conversion is less complete than this module.
+
+=item L<Lingua::JA::Romanize::Japanese>
+
+Romanization of Japanese. The module also includes romanization of
+kanji via the kakasi kanji to romaji convertor, and other functions.
+
+=item L<Lingua::JA::Romaji::Valid>
+
+Validate romanized Japanese. This module does the same thing as
+L</is_romaji> in Lingua::JA::Moji.
+
+=item L<Lingua::JA::Hepburn::Passport>
+
+Passport romanization, which means converting long vowels into
+"OH". This corresponds to L</kana2romaji> in the current module using
+the C<< passport => 1 >> option, for example
+
+    $romaji = kana2romaji ("かとう", {style => 'hepburn', passport => 1});
+
+=item L<Lingua::JA::Fold>
+
+Full/half width conversion, collation of Japanese text.
+
+=item L<Lingua::JA::Romaji>
+
+Romaji to kana/kana to romaji conversion.
+
+=item L<Lingua::JA::Regular::Unicode>
+
+This includes hiragana to katakana, full width / half width, and wide
+ascii conversion. The strange name is due to its being an extension of
+L<Lingua::JA::Regular> using Unicode-encoded strings.
 
 =item L<Lingua::KO::Munja>
 
@@ -980,10 +1033,50 @@ This is similar to the present module for Korean.
 
 =back
 
+=head2 Kana/kanji conversion
+
+=over
+
+=item L<Lingua::JA::Romanize::MeCab>
+
+Romanization of Japanese language with MeCab
+
+=item L<Text::MeCab>
+
+=item L<Lingua::JA::Romanize::Japanese>
+
+Romanization of Japanese language via kakasi.
+
+=back
+
 =head2 Books
 
 幣モジュールは冨田尚樹氏の「Perl CPANモジュールガイド」に説明しています。
 (ISBN 978-4862671080 WEB+DB PRESS plus, 2011年4月出版)
+
+=head1 NOTES
+
+=head2 chouon
+
+The long vowel marker, "ー", or I<chōon>, which is used in Japanese
+katakana to indicate a lengthened vowel.
+
+=head2 wide ASCII
+
+Wide ASCII, fullwidth ASCII, or I<zenkaku eisūji> (全角英数字) are a
+legacy of bitmapped fonts which has survived into the present
+day. "Wide ascii" characters were originally special bitmapped font
+characters created to be the same size as one kanji or kana
+character. The name for normal ASCII characters in Japanese is
+I<hankaku eisūji> (半角英数字), literally "half width English letters
+and numerals".
+
+=head2 Halfwidth katakana
+
+Halfwidth katakana, I<hankaku katakana> (半角かたかな) is a legacy
+encoding of katakana based on an eight-bit encoding. See
+L<http://www.sljfaq.org/afaq/half-width-katakana.html> for full
+details.
 
 =head1 EXPORT
 
@@ -998,7 +1091,7 @@ Ben Bullock, C<< <bkb@cpan.org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008-2012 Ben Bullock, all rights reserved.
+Copyright 2008-2013 Ben Bullock, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -1007,5 +1100,6 @@ under the same terms as Perl itself.
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to Naoki Tomita.
+Thanks to Naoki Tomita and David Steinbrunner for fixes.
+
 
