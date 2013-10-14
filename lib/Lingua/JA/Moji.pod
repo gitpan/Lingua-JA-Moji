@@ -241,6 +241,8 @@ undefined value if not.
     # The following line returns "undef"
     is_romaji ("abcdefg");
     # The following line returns a defined value
+    is_romaji ('loyehye');
+    # The following line returns a defined value
     is_romaji ("atarimae");
 
 
@@ -254,6 +256,38 @@ the string is empty, it returns a false value.
 
 This works by converting the string to kana via L</romaji2kana> and
 seeing if it converts cleanly or not.
+
+
+
+
+
+
+
+
+
+=head2 is_romaji_strict 
+
+    use Lingua::JA::Moji 'is_romaji_strict';
+
+    # The following line returns "undef"
+    is_romaji_strict ("abcdefg");
+    # The following line returns "undef"
+    is_romaji_strict ('loyehye');
+    # The following line returns a defined value
+    is_romaji_strict ("atarimae");
+
+
+
+
+This detects whether a string of alphabetical characters, which may
+also include characters with macrons or circumflexes, "looks like"
+romanized Japanese. If the test is successful, it returns a true
+value, and if the test is unsuccessful, it returns a false value. If
+the string is empty, it returns a false value.
+
+This test is much stricter than L</is_romaji>. It insists that the
+word does not contain constructions which may be valid as inputs to an
+IME, but which do not look like Japanese words.
 
 
 
@@ -1121,6 +1155,11 @@ Romaji to kana/kana to romaji conversion.
 This includes hiragana to katakana, full width / half width, and wide
 ascii conversion. The strange name is due to its being an extension of
 L<Lingua::JA::Regular> using Unicode-encoded strings.
+
+=item L<Lingua::JA::NormalizeText>
+
+A huge collection of normalization functions for Japanese text. If
+Lingua::JA::Moji does not have it, Lingua::JA::NormalizeText may do.
 
 =item L<Lingua::KO::Munja>
 

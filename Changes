@@ -1,5 +1,12 @@
 Revision history for perl module Lingua::JA::Moji
 
+0.27 2013-10-14
+
+* Romaji to kana for hyi, hye, fya, fye, fyi, fyo, fyu, dyi, dye.
+* New function "is_romaji_strict", detects Japanese romanized words.
+
+0.26 2013-09-20
+
 0.25 2013-08-17
 
 * Documentation rewrites
@@ -7,11 +14,20 @@ Revision history for perl module Lingua::JA::Moji
 
 0.24 2013-03-06
 
+* New function "katakana2syllable", breaks Japanese into syllables.
+
 0.23 2012-09-16
+
+* Bug fixes
 
 0.22 2012-07-21
 
+* Cleanup of distribution (remove unneeded files).
+
 0.21 2012-07-18
+
+* Bug fixes
+* Improved tests
 
 0.20 2012-05-29
 

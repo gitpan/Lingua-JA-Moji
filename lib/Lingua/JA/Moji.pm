@@ -6,7 +6,7 @@ require Exporter;
 use warnings;
 use strict;
 
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 
 use Carp;
 use Convert::Moji qw/make_regex length_one unambiguous/;
@@ -25,6 +25,7 @@ our @EXPORT_OK = qw/
                     is_hiragana
                     is_kana
                     is_romaji
+                    is_romaji_strict
                     is_voiced
                     kana2braille
                     kana2circled
@@ -625,6 +626,47 @@ sub is_romaji
         return kana2romaji ($kana, {wapuro => 1});
     }
     return;
+}
+
+my $vowel_re = qr/[aeiouâêîôûāēōū]/;
+my $no_u_vowel_re = qr/[aeioâêîôāēō]/;
+my $u_re = qr/[uūû]/;
+
+sub is_romaji_strict
+{
+    binmode STDOUT, ":utf8";
+    my ($romaji) = @_;
+    if (! is_romaji ($romaji)) {
+	return;
+    }
+    if ($romaji =~ /
+		       # Don't allow small vowels, small tsu, or fya,
+		       # fye etc.
+		       (fy|l|x|v)y?($vowel_re|ts?u|wa|ka|ke)
+		   |
+		       # Don't allow hyi, hye, yi, ye.
+		       [zh]?y[ieêîē]
+		   |
+		       # Don't allow tye
+		       ty[eêē]
+		   |
+		       # Don't allow wh-, kw-, gw-, dh-, etc.
+		       (wh|kw|gw|dh)$vowel_re
+		   |
+		       # Don't allow tsa, tsi, tse, tso, fa, fe, fi, fo.
+		       (ts|f)$no_u_vowel_re
+		   |
+		       # Don't allow "t'i"
+		       [dt]'(i|y?$u_re)
+		   |
+		       # Don't allow dwu, twu
+		       [dt](w$u_re)
+		   |
+		       hwy$u_re
+		   /ix) {
+        return;
+    }
+    return 1;
 }
 
 sub hira2kata

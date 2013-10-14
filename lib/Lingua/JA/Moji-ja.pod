@@ -233,12 +233,38 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
     # The following line returns "undef"
     is_romaji ("abcdefg");
     # The following line returns a defined value
+    is_romaji ('loyehye');
+    # The following line returns a defined value
     is_romaji ("atarimae");
 
 
 
 
 アルファベットの列はローマ字に見えるなら真、見えないなら偽。
+
+
+
+
+
+
+
+
+
+=head2 is_romaji_strict 
+
+    use Lingua::JA::Moji 'is_romaji_strict';
+
+    # The following line returns "undef"
+    is_romaji_strict ("abcdefg");
+    # The following line returns "undef"
+    is_romaji_strict ('loyehye');
+    # The following line returns a defined value
+    is_romaji_strict ("atarimae");
+
+
+
+
+アルファベットの列はローマ字に見えるなら真、見えないなら偽。L</is_romaji>より厳しく、コンピューター入力に見えるかどうかではなく、本当に「日本語」かどうか確認する。
 
 
 
@@ -1032,6 +1058,11 @@ Romaji to kana/kana to romaji conversion.
 This includes hiragana to katakana, full width / half width, and wide
 ascii conversion. The strange name is due to its being an extension of
 L<Lingua::JA::Regular> using Unicode-encoded strings.
+
+=item L<Lingua::JA::NormalizeText>
+
+A huge collection of normalization functions for Japanese text. If
+Lingua::JA::Moji does not have it, Lingua::JA::NormalizeText may do.
 
 =item L<Lingua::KO::Munja>
 
