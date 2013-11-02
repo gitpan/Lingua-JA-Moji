@@ -122,6 +122,12 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
 
 ワープロローマ字。長音符は使わない。「少女」が「shoujo」など。
 
+=item wo
+
+     kana2romaji ("ちりぬるを", { wo => 1 });
+
+"wo"が真なら、「を」が"wo"になります。そうでもない場合は"o"になります。
+
 =back
 
 
@@ -150,6 +156,10 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
      $kana = romaji2kana ($romaji, {wapuro => 1});
 
 長音「ou」を「オー」ではなく、「オウ」にしたいときはwapuroを真にする C<< wapuro => 1 >>。
+
+     $kana = romaji2kana ($romaji, {ime => 1});
+
+C<< ime => 1 >>オプションでIMEのような変換ができます。たとえば、"gumma"が「グッマ」、"onnna"が「オンナ」となります。パスポートローマ字 ("Ohshimizu") は無効となります。
 
 
 

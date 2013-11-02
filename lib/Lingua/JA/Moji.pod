@@ -119,6 +119,13 @@ Chouon marks become hyphens, and おう becomes ou.
 
 =back
 
+=item wo
+
+     kana2romaji ("ちりぬるを", { wo => 1 });
+
+If "wo" is set to a true value, "を" becomes "wo", otherwise it
+becomes "o".
+
 =back
 
 
@@ -152,6 +159,13 @@ form of a hash reference,
 
 Use an option C<< wapuro => 1 >> to convert long vowels into the
 equivalent kana rather than L</chouon>.
+
+     $kana = romaji2kana ($romaji, {ime => 1});
+
+Use the C<< ime => 1 >> option to approximate the behaviour of an
+IME. For example, input "gumma" becomes グッマ and input "onnna"
+becomes オンナ. Passport romaji ("Ohshimizu") is disallowed if this
+option is switched on.
 
 
 
