@@ -79,9 +79,11 @@ The options are
 
 The style of romanization. The default style of romanization is
 "Nippon-shiki". The user can set the conversion style to "hepburn" or
-"passport" or "kunrei". If Hepburn is selected, then the following
-option C<use_m> is set to "true", and the C<ve_type> is set to
-"macron".
+"passport" or "kunrei" or "common". If Hepburn is selected, then the
+following option C<use_m> is set to "true", and the C<ve_type> is set
+to "macron". The "common" style is the same as the Hepburn style, but
+it does things like changing "ジェット" to "jetto" rather than
+ignoring the small vowel.
 
 =item use_m
 
@@ -652,6 +654,46 @@ mark" (U+FF9F) <ﾟ> (handakuten). It is somewhat like the following:
 
 except that the unassigned points which are matched by C<\p{Katakana}>
 are not matched.
+
+
+
+
+
+
+
+
+
+=head2 square2katakana 
+
+    use Lingua::JA::Moji 'square2katakana';
+
+    $kata = square2katakana ('㌆');
+    # Now $kata = 'ウォン'
+
+
+
+
+Convert a square katakana box into its components.
+
+
+
+
+
+
+
+
+
+=head2 katakana2square 
+
+    use Lingua::JA::Moji 'katakana2square';
+
+    $sq = katakana2square ('アイウエオウォン');
+    # Now $sq = 'アイウエオ㌆'
+
+
+
+
+Convert katakana into a square thing if possible.
 
 
 
@@ -1249,6 +1291,6 @@ under the same terms as Perl itself.
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to Naoki Tomita and David Steinbrunner for fixes.
+Thanks to Naoki Tomita, David Steinbrunner, and Neil Bowers for fixes.
 
 

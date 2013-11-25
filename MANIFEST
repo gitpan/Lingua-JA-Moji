@@ -13,6 +13,7 @@ lib/Lingua/JA/Moji/katakana2morse.txt
 lib/Lingua/JA/Moji/new_kanji2old_kanji.txt
 lib/Lingua/JA/Moji/rest2hangul.txt
 lib/Lingua/JA/Moji/romaji2katakana.txt
+lib/Lingua/JA/Moji/square-katakana.txt
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -28,11 +29,13 @@ t/InKana.t
 t/InWideAscii.t
 t/is-romaji-strict.t
 t/is-romaji.t
+t/kana2romaji.t
 t/katakana2syllable.t
 t/Lingua-JA-Moji.t
 t/lingua-ja-regular-unicode.t
 t/new-old-kanji.t
 t/romaji2kana.t
+t/square.t
 t/wanakana.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)

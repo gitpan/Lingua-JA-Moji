@@ -582,6 +582,46 @@ expressions with C<\p> which can validate L</halfwidth katakana>.
 
 
 
+=head2 square2katakana 
+
+    use Lingua::JA::Moji 'square2katakana';
+
+    $kata = square2katakana ('㌆');
+    # Now $kata = 'ウォン'
+
+
+
+
+Convert a square katakana box into its components.
+
+
+
+
+
+
+
+
+
+=head2 katakana2square 
+
+    use Lingua::JA::Moji 'katakana2square';
+
+    $sq = katakana2square ('アイウエオウォン');
+    # Now $sq = 'アイウエオ㌆'
+
+
+
+
+Convert katakana into a square thing if possible.
+
+
+
+
+
+
+
+
+
 
 
 =head1 全角英数字
@@ -1147,6 +1187,6 @@ under the same terms as Perl itself.
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to Naoki Tomita and David Steinbrunner for fixes.
+Thanks to Naoki Tomita, David Steinbrunner, and Neil Bowers for fixes.
 
 

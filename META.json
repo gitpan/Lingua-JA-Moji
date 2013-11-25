@@ -4,7 +4,7 @@
       "Ben Bullock bkb@cpan.org"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "ExtUtils::MakeMaker version 6.8, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -47,5 +47,5 @@
          "url" : "https://github.com/benkasminbullock/Lingua-JA-Moji"
       }
    },
-   "version" : "0.29"
+   "version" : "0.30"
 }
