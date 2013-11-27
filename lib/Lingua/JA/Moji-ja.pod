@@ -81,6 +81,10 @@ Lingua::JA::Moji - 総合日本文字変換「文字ュール」
 ヘボン式（「つづり」が「tsuzuri」, 「少女」が「shōjo」）。
 これを選べば、下記のuse_mが真になり、ve_typeがmacronになります。
 
+=item common
+
+「ジェット」が「jetto」になります。「ウェ」が「we」になります。
+
 =back
 
 =item use_m
