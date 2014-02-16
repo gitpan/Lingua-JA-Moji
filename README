@@ -12,7 +12,7 @@
              |__/   
 
 
-This is the README for Lingua::JA::Moji version 0.31.
+This is the README for Lingua::JA::Moji version 0.32.
 
 Lingua::JA::Moji is a "module" for the Perl computer programming language, a
 library of computer code to install on a computer.  This document contains four
@@ -72,6 +72,8 @@ using
 
 3. INSTALLATION
 
+This module requires Perl version 5.8.9 or later.
+
 To install the module from CPAN, use
 
     cpan Lingua::JA::Moji
@@ -80,11 +82,11 @@ If you have the App::cpanminus installer, you may prefer
 
     cpanm Lingua::JA::Moji
 
-To install the module from the source file, Lingua-JA-Moji-0.31.tar.gz, follow
+To install the module from the source file, Lingua-JA-Moji-0.32.tar.gz, follow
 this sequence of commands:
 
-    tar xfz Lingua-JA-Moji-0.31.tar.gz
-    cd Lingua-JA-Moji-0.31
+    tar xfz Lingua-JA-Moji-0.32.tar.gz
+    cd Lingua-JA-Moji-0.32
     perl Makefile.PL
     make
     make install
@@ -109,6 +111,6 @@ repository on github at
 
 -----------------------------------------------------------------------------
 
-This README was written on Wed Nov 27 19:20:58 2013.
+This README was written on Mon Feb 17 08:41:08 2014.
 
 -----------------------------------------------------------------------------
